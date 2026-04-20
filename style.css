@@ -204,3 +204,143 @@ body {
   padding: 20px;
   font-size: 13px;
 }
+
+
+/* LOGIN */
+.login-section {
+  display: flex;
+  justify-content: center;
+  padding: 60px 32px;
+  background: #f5f5f5;
+}
+
+.login-box {
+  background: white;
+  padding: 40px;
+  border-radius: 12px;
+  border: 1px solid #e0e0e0;
+  width: 100%;
+  max-width: 420px;
+}
+
+.login-box h2 {
+  font-size: 24px;
+  color: #1a1a2e;
+  margin-bottom: 8px;
+}
+
+.login-subtitle {
+  color: #aaa;
+  font-size: 14px;
+  margin-bottom: 24px;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: bold;
+  color: #1a1a2e;
+  margin-bottom: 6px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 14px;
+  outline: none;
+}
+
+.form-group input:focus {
+  border-color: #e94560;
+}
+
+.login-btn {
+  width: 100%;
+  padding: 12px;
+  background: #e94560;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 15px;
+  cursor: pointer;
+  margin-top: 8px;
+}
+
+.login-btn:hover {
+  background: #c73652;
+}
+
+/* ZONE EDUCATIVE */
+.edu-section {
+  padding: 40px 32px;
+  background: #f5f5f5;
+}
+
+.edu-box {
+  max-width: 800px;
+  margin: 0 auto;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #e0e0e0;
+}
+
+.edu-header {
+  background: #1a1a2e;
+  color: white;
+  padding: 16px 24px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.edu-content {
+  background: white;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.edu-block {
+  padding: 16px;
+  border-radius: 8px;
+  background: #f9f9f9;
+  border-left: 4px solid #1a1a2e;
+}
+
+.edu-block.warning {
+  border-left-color: #e94560;
+  background: #fff5f6;
+}
+
+.edu-block.success {
+  border-left-color: #28a745;
+  background: #f0fff4;
+}
+
+.edu-block h3 {
+  font-size: 15px;
+  margin-bottom: 8px;
+  color: #1a1a2e;
+}
+
+.edu-block p {
+  font-size: 14px;
+  color: #555;
+  line-height: 1.6;
+}
+
+.code-block {
+  background: #1a1a2e;
+  color: #e94560;
+  padding: 12px 16px;
+  border-radius: 6px;
+  font-family: monospace;
+  font-size: 13px;
+  margin: 10px 0;
+}
