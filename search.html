@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HackTheShop - Recherche</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <span class="logo">HackTheShop</span>
+    <ul class="nav-links">
+      <li><a href="index.html">Accueil</a></li>
+      <li><a href="products.html">Produits</a></li>
+      <li><a href="login.html">Connexion</a></li>
+      <li><a href="search.html">Recherche</a></li>
+    </ul>
+    <button class="cart-btn">🛒 Panier (0)</button>
+  </nav>
+
+  <!-- BARRE DE RECHERCHE -->
+  <section class="search-section">
+    <h2>Rechercher un produit</h2>
+    <p class="search-subtitle">Trouvez le produit que vous cherchez</p>
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="Ex: laptop, smartphone...">
+      <button onclick="doSearch()">🔍 Rechercher</button>
+    </div>
+
+    <!-- RÉSULTAT VULNÉRABLE -->
+    <div class="search-result" id="searchResult"></div>
+  </section>
+
+  <!-- PANNEAU EDUCATIF XSS RÉFLÉCHI -->
+  <section class="edu-section">
+    <div class="edu-box">
+      <div class="edu-header">
+        🛡️ Zone Éducative — XSS Réfléchi
+      </div>
+      <div class="edu-content">
+
+        <div class="edu-block">
+          <h3>📌 C'est quoi XSS Réfléchi ?</h3>
+          <p>XSS Réfléchi est une attaque où le code malveillant est injecté via l'URL ou un formulaire de recherche. Contrairement au XSS Stocké, il n'est pas sauvegardé en base de données — il est directement reflété dans la page.</p>
+        </div>
+
+        <div class="edu-block warning">
+          <h3>⚠️ Comment tester ici ?</h3>
+          <p>Cette barre de recherche est volontairement vulnérable. Tape ceci dans le champ recherche :</p>
+          <div class="code-block">
+            &lt;script&gt;alert('XSS Réfléchi !')&lt;/script&gt;
+          </div>
+          <p>Une alerte va s'afficher — c'est du XSS Réfléchi en action !</p>
+        </div>
+
+        <div class="edu-block warning">
+          <h3>🔗 Via l'URL aussi !</h3>
+          <p>Le XSS Réfléchi peut aussi passer par l'URL. Essaie de coller ceci dans la barre du navigateur :</p>
+          <div class="code-block">
+            search.html?q=&lt;script&gt;alert('XSS URL')&lt;/script&gt;
+          </div>
+        </div>
+
+        <div class="edu-block success">
+          <h3>✅ Comment se protéger ?</h3>
+          <p>Ne jamais afficher directement l'input utilisateur sans le nettoyer :</p>
+          <div class="code-block">
+            // En JavaScript (sécurisé)<br>
+            element.textContent = userInput;<br><br>
+            // En PHP (sécurisé)<br>
+            echo htmlspecialchars($_GET['q']);
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    © 2025 HackTheShop — Projet éducatif cybersécurité
+  </footer>
+
+  <script src="js/demo.js"></script>
+</body>
+</html>
