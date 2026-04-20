@@ -101,17 +101,21 @@ session_start();
         .quick-btn:hover {
             background: #bfdbfe;
         }
+        .typing {
+            font-style: italic;
+            color: #64748b;
+        }
     </style>
 </head>
 <body>
 
     <h1>HackTheShop - Web Security Lab</h1>
-    
+
     <div id="chat-container">
         <div id="chat-header">
             🤖 Security Chatbot
         </div>
-        
+
         <div id="chat-messages">
             <div class="message bot-message">
                 Hello! I'm your Security Assistant.<br><br>
@@ -138,7 +142,6 @@ session_start();
     </div>
 
 <script>
-// assets/js/chatbot.js embedded for simplicity
 const chatMessages = document.getElementById('chat-messages');
 const userInput = document.getElementById('user-input');
 const sendBtn = document.getElementById('send-btn');
@@ -146,9 +149,14 @@ const sendBtn = document.getElementById('send-btn');
 function addMessage(text, type) {
     const div = document.createElement('div');
     div.className = `message ${type}-message`;
-    div.innerHTML = text;
+    if (type === 'user') {
+        div.textContent = text;       // plain text — safe against XSS
+    } else {
+        div.innerHTML = text;         // bot responses may contain formatting
+    }
     chatMessages.appendChild(div);
     chatMessages.scrollTop = chatMessages.scrollHeight;
+    return div;
 }
 
 function sendMessage() {
@@ -157,18 +165,32 @@ function sendMessage() {
 
     addMessage(message, 'user');
     userInput.value = '';
+    sendBtn.disabled = true;
+
+    // Show a typing indicator while waiting
+    const typingDiv = addMessage('Thinking...', 'bot');
+    typingDiv.classList.add('typing');
 
     fetch('reply.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: 'message=' + encodeURIComponent(message)
+        body: new URLSearchParams({ message: message })
     })
-    .then(response => response.json())
+    .then(res => {
+        if (!res.ok) throw new Error('Server returned ' + res.status);
+        return res.json();
+    })
     .then(data => {
-        addMessage(data.reply, 'bot');
+        typingDiv.remove();
+        addMessage(data.reply || 'No reply received.', 'bot');
     })
-    .catch(() => {
-        addMessage("Sorry, I couldn't connect. Is reply.php in the same folder?", 'bot');
+    .catch(err => {
+        typingDiv.remove();
+        console.error('Fetch error:', err);
+        addMessage('Error: ' + err.message, 'bot');
+    })
+    .finally(() => {
+        sendBtn.disabled = false;
     });
 }
 
@@ -177,7 +199,6 @@ function sendQuickMessage(text) {
     sendMessage();
 }
 
-// Event listeners
 sendBtn.addEventListener('click', sendMessage);
 userInput.addEventListener('keypress', function(e) {
     if (e.key === 'Enter') sendMessage();
