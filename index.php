@@ -39,7 +39,7 @@ body {
     position: relative;
 }
 
-/* ── PARTICLE CANVAS (background layer) ── */
+/* ── PARTICLE CANVAS ── */
 #particles {
     position: absolute;
     top: 0;
@@ -53,7 +53,7 @@ body {
 /* ── HEADER ── */
 .chat-header {
     background: rgba(19, 19, 31, 0.95);
-    padding: 16px 18px;
+    padding: 14px 18px;
     display: flex;
     align-items: center;
     gap: 12px;
@@ -62,46 +62,33 @@ body {
     z-index: 2;
 }
 
-/* ── AVATAR ── */
+/* ── HEADER STICKER — no circle, free floating ── */
 .avatar-wrap {
-    position: relative;
-    width: 54px;
-    height: 54px;
+    width: 58px;
+    height: 64px;
     flex-shrink: 0;
 }
 
-.avatar-ring {
-    position: absolute;
-    inset: -3px;
-    border-radius: 50%;
-    border: 2px solid #7c3aed;
-    animation: pulse-ring 2s ease-in-out infinite;
-}
-
 .avatar-img {
-    width: 54px;
-    height: 54px;
-    border-radius: 50%;
-    background: #1a1a2e;
-    border: 2px solid #3b2f6e;
-    overflow: hidden;
+    width: 58px;
+    height: 64px;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    overflow: visible;
     display: flex;
+    align-items: flex-end;
     justify-content: center;
-    align-items: center;
-    font-size: 1.6rem;
     animation: wave-bob 3s ease-in-out infinite;
     transform-origin: center bottom;
 }
 
-/*
-    ════════════════════════════════════════
-    TO USE YOUR CHARACTER PHOTO:
-    Replace the emoji inside .avatar-img with:
-    <img src="images/your-character.png"
-         style="width:100%;height:100%;object-fit:cover;">
-    Use a PNG with transparent background for best result.
-    ════════════════════════════════════════
-*/
+.avatar-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
 
 .bot-name {
     color: #a78bfa;
@@ -141,7 +128,7 @@ body {
 /* ── MESSAGES AREA ── */
 .chat-messages {
     flex: 1;
-    padding: 16px;
+    padding: 14px;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
@@ -155,15 +142,35 @@ body {
 .chat-messages::-webkit-scrollbar-track { background: transparent; }
 .chat-messages::-webkit-scrollbar-thumb { background: #3b2f6e; border-radius: 3px; }
 
+/* ── BOT ROW: [mini sticker] + [bubble] like Messenger ── */
+.bot-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 7px;
+    align-self: flex-start;
+    max-width: 92%;
+    animation: msg-in 0.25s ease;
+}
+
+/* Mini sticker shown beside every bot bubble */
+.bubble-sticker {
+    width: 34px;
+    height: 38px;
+    flex-shrink: 0;
+    object-fit: contain;
+    display: block;
+    animation: wave-bob 3s ease-in-out infinite;
+    transform-origin: center bottom;
+    /* slight offset so each sticker bobs at a different phase */
+}
+
 /* ── BUBBLES ── */
 .message {
-    max-width: 85%;
-    padding: 12px 15px;
+    padding: 11px 14px;
     border-radius: 14px;
     font-size: 0.88rem;
     line-height: 1.55;
     word-wrap: break-word;
-    animation: msg-in 0.25s ease;
 }
 
 .bot {
@@ -171,7 +178,6 @@ body {
     color: #e2d9f3;
     border: 1px solid #3b2f6e;
     border-radius: 0 14px 14px 14px;
-    align-self: flex-start;
 }
 
 .user {
@@ -180,6 +186,8 @@ body {
     border: 1px solid #7c3aed;
     border-radius: 14px 14px 0 14px;
     align-self: flex-end;
+    max-width: 85%;
+    animation: msg-in 0.25s ease;
 }
 
 .typing {
@@ -261,8 +269,6 @@ body {
 .chat-input button:hover { background: #6d28d9; }
 
 /* ── ANIMATIONS ── */
-
-/* Avatar gentle float + tilt */
 @keyframes wave-bob {
     0%   { transform: translateY(0px)   rotate(-2deg); }
     25%  { transform: translateY(-5px)  rotate(2deg);  }
@@ -271,36 +277,26 @@ body {
     100% { transform: translateY(0px)   rotate(-2deg); }
 }
 
-/* Quick excited wave on message send/receive */
 @keyframes wave-excited {
-    0%   { transform: translateY(0px)    rotate(0deg);  }
-    15%  { transform: translateY(-8px)   rotate(8deg);  }
-    30%  { transform: translateY(-4px)   rotate(-6deg); }
-    45%  { transform: translateY(-10px)  rotate(10deg); }
-    60%  { transform: translateY(-5px)   rotate(-4deg); }
-    75%  { transform: translateY(-8px)   rotate(7deg);  }
-    100% { transform: translateY(0px)    rotate(0deg);  }
+    0%   { transform: translateY(0px)   rotate(0deg);  }
+    15%  { transform: translateY(-8px)  rotate(8deg);  }
+    30%  { transform: translateY(-4px)  rotate(-6deg); }
+    45%  { transform: translateY(-10px) rotate(10deg); }
+    60%  { transform: translateY(-5px)  rotate(-4deg); }
+    75%  { transform: translateY(-8px)  rotate(7deg);  }
+    100% { transform: translateY(0px)   rotate(0deg);  }
 }
 
-/* Glowing ring pulse */
-@keyframes pulse-ring {
-    0%, 100% { opacity: 0.5; transform: scale(1);    }
-    50%       { opacity: 1;   transform: scale(1.1); }
-}
-
-/* Status dot blink */
 @keyframes blink {
     0%, 100% { opacity: 1;   }
     50%       { opacity: 0.2; }
 }
 
-/* Message slide-in */
 @keyframes msg-in {
     from { opacity: 0; transform: translateY(8px); }
     to   { opacity: 1; transform: translateY(0);   }
 }
 
-/* Mobile */
 @media (max-width: 500px) {
     body { padding: 0; }
     .chat-container { height: 100vh; max-width: 100%; border-radius: 0; }
@@ -318,10 +314,9 @@ body {
     <div class="chat-header">
 
         <div class="avatar-wrap">
-            <div class="avatar-ring"></div>
             <div class="avatar-img" id="echoAvatar">
-               
-                <img src="echo.png" style="width:100%;height:100%;object-fit:cover;">
+                
+                <img src="echo.png" alt="Echo">
             </div>
         </div>
 
@@ -337,14 +332,7 @@ body {
     </div>
 
     <!-- MESSAGES -->
-    <div class="chat-messages" id="messages">
-        <div class="message bot">
-            Hello 👋 Welcome to <b style="color:#a78bfa;">HackTheShop</b>.<br><br>
-            I can help you with:<br>
-            <span style="color:#22d3ee;">&#9656;</span> Orders / Refunds / Products<br><br>
-            Ask me anything.
-        </div>
-    </div>
+    <div class="chat-messages" id="messages"></div>
 
     <!-- QUICK ACTIONS -->
     <div class="quick">
@@ -362,9 +350,9 @@ body {
 </div>
 
 <script>
-/* ════════════════════════════════════
-   PARTICLE BACKGROUND ANIMATION
-   ════════════════════════════════════ */
+/* ═══════════════════════════════════
+   PARTICLE BACKGROUND
+   ═══════════════════════════════════ */
 const canvas = document.getElementById('particles');
 const ctx    = canvas.getContext('2d');
 const cont   = canvas.parentElement;
@@ -376,9 +364,7 @@ function resizeCanvas() {
 resizeCanvas();
 window.addEventListener('resize', resizeCanvas);
 
-// Generate particles
-const PARTICLE_COUNT = 70;
-const particles = Array.from({ length: PARTICLE_COUNT }, () => ({
+const particles = Array.from({ length: 70 }, () => ({
     x:          Math.random() * canvas.width,
     y:          Math.random() * canvas.height,
     r:          Math.random() * 1.6 + 0.3,
@@ -387,7 +373,6 @@ const particles = Array.from({ length: PARTICLE_COUNT }, () => ({
     alpha:      Math.random(),
     alphaDir:   Math.random() > 0.5 ? 1 : -1,
     alphaSpeed: Math.random() * 0.008 + 0.002,
-    // occasional cyan/purple tint
     color:      Math.random() > 0.85
                     ? (Math.random() > 0.5 ? '124,58,237' : '34,211,238')
                     : '255,255,255'
@@ -396,7 +381,6 @@ const particles = Array.from({ length: PARTICLE_COUNT }, () => ({
 function drawParticles() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Draw connection lines between close particles
     for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
             const dx   = particles[i].x - particles[j].x;
@@ -413,24 +397,18 @@ function drawParticles() {
         }
     }
 
-    // Draw and move each particle
     particles.forEach(p => {
-        // Move
         p.x += p.vx;
         p.y += p.vy;
-
-        // Wrap around edges
         if (p.x < 0)             p.x = canvas.width;
         if (p.x > canvas.width)  p.x = 0;
         if (p.y < 0)             p.y = canvas.height;
         if (p.y > canvas.height) p.y = 0;
 
-        // Pulse alpha
         p.alpha += p.alphaDir * p.alphaSpeed;
         if (p.alpha >= 1)    { p.alpha = 1;    p.alphaDir = -1; }
         if (p.alpha <= 0.04) { p.alpha = 0.04; p.alphaDir =  1; }
 
-        // Draw dot
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(${p.color},${p.alpha})`;
@@ -442,42 +420,64 @@ function drawParticles() {
 drawParticles();
 
 
-/* ════════════════════════════════════
-   AVATAR WAVE ANIMATION
-   ════════════════════════════════════ */
+/* ═══════════════════════════════════
+   AVATAR WAVE
+   ═══════════════════════════════════ */
 const avatar = document.getElementById('echoAvatar');
+let bobOffset = 0;
 
 function triggerExcitedWave() {
-    // Switch to excited wave
     avatar.style.animation = 'none';
-    // Force reflow so the reset registers
     void avatar.offsetHeight;
     avatar.style.animation = 'wave-excited 0.6s ease-in-out 2';
-
-    // After excited wave, return to gentle bob
     setTimeout(() => {
         avatar.style.animation = 'wave-bob 3s ease-in-out infinite';
     }, 1300);
 }
 
 
-/* ════════════════════════════════════
+/* ═══════════════════════════════════
    CHAT LOGIC
-   ════════════════════════════════════ */
-const messages = document.getElementById('messages');
-const input    = document.getElementById('userInput');
+   ═══════════════════════════════════ */
+const messagesEl = document.getElementById('messages');
+const input      = document.getElementById('userInput');
 
-function addMessage(text, type) {
+/*
+   addBotMessage(html)
+   Creates a Messenger-style row:
+   [ mini-sticker ]  [ bubble ]
+*/
+function addBotMessage(html) {
+    const row = document.createElement('div');
+    row.className = 'bot-row';
+
+    // Mini sticker — same PNG as the header, bobs independently
+    const sticker     = document.createElement('img');
+    sticker.src       = 'images/echo-character.png';
+    sticker.alt       = 'Echo';
+    sticker.className = 'bubble-sticker';
+    // Stagger animation so it doesn't sync exactly with the header avatar
+    sticker.style.animationDelay = (Math.random() * 1.5).toFixed(2) + 's';
+
+    // Text bubble
+    const bubble      = document.createElement('div');
+    bubble.className  = 'message bot';
+    bubble.innerHTML  = html;
+
+    row.appendChild(sticker);
+    row.appendChild(bubble);
+    messagesEl.appendChild(row);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+
+    return row;   // return row so typing indicator can be removed cleanly
+}
+
+function addUserMessage(text) {
     const div       = document.createElement('div');
-    div.className   = 'message ' + type;
-    if (type === 'user') {
-        div.textContent = text;
-    } else {
-        div.innerHTML = text;
-    }
-    messages.appendChild(div);
-    messages.scrollTop = messages.scrollHeight;
-    return div;
+    div.className   = 'message user';
+    div.textContent = text;
+    messagesEl.appendChild(div);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
 }
 
 function quickMsg(text) {
@@ -489,12 +489,12 @@ function sendMessage() {
     const msg = input.value.trim();
     if (msg === '') return;
 
-    addMessage(msg, 'user');
+    addUserMessage(msg);
     input.value = '';
     triggerExcitedWave();
 
-    const typing = addMessage('...', 'bot');
-    typing.classList.add('typing');
+    // Typing indicator row
+    const typingRow = addBotMessage('<span class="typing">...</span>');
 
     fetch('reply.php', {
         method:  'POST',
@@ -503,18 +503,27 @@ function sendMessage() {
     })
     .then(r => r.json())
     .then(data => {
-        typing.remove();
-        addMessage(data.reply, 'bot');
+        typingRow.remove();
+        addBotMessage(data.reply);
         triggerExcitedWave();
     })
     .catch(() => {
-        typing.remove();
-        addMessage('&#9888; Connection error. Please try again.', 'bot');
+        typingRow.remove();
+        addBotMessage('&#9888; Connection error. Please try again.');
     });
 }
 
 input.addEventListener('keypress', function(e) {
     if (e.key === 'Enter') sendMessage();
+});
+
+// Welcome message on page load
+window.addEventListener('load', function() {
+    addBotMessage(
+        'Hello 👋 Welcome to <b style="color:#a78bfa;">HackTheShop</b>.<br><br>' +
+        '<span style="color:#22d3ee;">&#9656;</span> Orders / Refunds / Products<br><br>' +
+        'Ask me anything.'
+    );
 });
 </script>
 
