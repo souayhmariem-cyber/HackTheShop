@@ -478,3 +478,24 @@ textarea:focus {
   color: #aaa;
   font-size: 14px;
 }
+
+/* MESSAGES */
+.error-msg {
+  background: #fff5f6;
+  color: #e94560;
+  padding: 12px 16px;
+  border-radius: 6px;
+  border: 1px solid #e94560;
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+
+.success-msg {
+  background: #f0fff4;
+  color: #28a745;
+  padding: 12px 16px;
+  border-radius: 6px;
+  border: 1px solid #28a745;
+  margin-bottom: 16px;
+  font-size: 14px;
+}
