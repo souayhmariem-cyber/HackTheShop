@@ -1,82 +1,611 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>HackTheShop</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
-  <!-- NAVBAR -->
-  <nav class="navbar">
-    <span class="logo">HackTheShop</span>
-    <ul class="nav-links">
-      <li><a href="index.html">Accueil</a></li>
-      <li><a href="products.html">Produits</a></li>
-      <li><a href="login.html">Connexion</a></li>
-      <li><a href="search.html">Recherche</a></li>
-    </ul>
-    <button class="cart-btn">🛒 Panier (0)</button>
-  </nav>
+  <!-- PARTICLE CANVAS -->
+  <canvas id="particles"></canvas>
 
-  <!-- HERO -->
-  <section class="hero">
-    <span class="badge">Plateforme éducative en cybersécurité</span>
-    <h1>Bienvenue sur HackTheShop</h1>
-    <p>Découvrez les vulnérabilités web à travers un faux e-commerce interactif</p>
-    <button class="hero-btn">Voir les produits</button>
-    <button class="hero-btn outline">En savoir plus</button>
-  </section>
+  <div class="wrapper">
 
-  <!-- PRODUITS -->
-  <section class="products">
-    <h2 class="section-title">Produits populaires</h2>
-    <div class="grid">
-      <div class="card">
-        <div class="card-img">💻</div>
-        <div class="card-body">
-          <div class="card-title">Laptop Pro X</div>
-          <div><span class="card-price">799€</span><span class="card-old">999€</span></div>
-          <button class="add-btn">Ajouter au panier</button>
-        </div>
+    <!-- ── SIDEBAR ── -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <button class="close-sidebar" onclick="toggleSidebar()">✕</button>
       </div>
-      <div class="card">
-        <div class="card-img">📱</div>
-        <div class="card-body">
-          <div class="card-title">Smartphone Z12</div>
-          <div><span class="card-price">499€</span><span class="card-old">649€</span></div>
-          <button class="add-btn">Ajouter au panier</button>
-        </div>
+      <nav class="sidebar-nav">
+        <a href="login.html"><i class="fa fa-user"></i> Login</a>
+        <a href="#"><i class="fa fa-tag"></i> Promotions</a>
+        <a href="#"><i class="fa fa-circle-user"></i> Your Account</a>
+        <a href="#"><i class="fa fa-headset"></i> Customer Service</a>
+      </nav>
+    </aside>
+
+    <!-- ── OVERLAY ── -->
+    <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+    <!-- ── NAVBAR ── -->
+    <nav class="navbar">
+      <div class="nav-left">
+        <button class="burger" onclick="toggleSidebar()">
+          <i class="fa fa-bars"></i>
+        </button>
+        <a href="login.html" class="nav-login">Login</a>
       </div>
-      <div class="card">
-        <div class="card-img">🎧</div>
-        <div class="card-body">
-          <div class="card-title">Casque Audio Pro</div>
-          <div><span class="card-price">149€</span><span class="card-old">199€</span></div>
-          <button class="add-btn">Ajouter au panier</button>
-        </div>
+
+      <div class="nav-center">
+        <span class="logo">HackTheShop</span>
       </div>
-      <div class="card">
-        <div class="card-img">⌚</div>
-        <div class="card-body">
-          <div class="card-title">Montre Connect</div>
-          <div><span class="card-price">249€</span><span class="card-old">329€</span></div>
-          <button class="add-btn">Ajouter au panier</button>
-        </div>
+
+      <div class="nav-right">
+        <button class="nav-icon" onclick="toggleSearch()">
+          <i class="fa fa-search"></i>
+        </button>
+        <button class="nav-icon" onclick="toggleWishlist()">
+          <i class="fa fa-heart"></i>
+        </button>
+        <button class="nav-icon" onclick="toggleCart()">
+          <i class="fa fa-shopping-cart"></i>
+          <span class="cart-count" id="cartCount">0</span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- ── SEARCH BAR ── -->
+    <div class="search-dropdown" id="searchDropdown">
+      <input type="text" id="searchInput" placeholder="Search products...">
+      <button onclick="searchProducts()"><i class="fa fa-search"></i></button>
+    </div>
+
+<!-- ── CATEGORIES ── -->
+<div class="categories">
+  <button class="cat-btn active" onclick="filterProducts('all', this)">All</button>
+  <button class="cat-btn" onclick="filterProducts('pc', this)">💻 PC & Laptops</button>
+  <button class="cat-btn" onclick="filterProducts('phone', this)">📱 Phones</button>
+  <button class="cat-btn" onclick="filterProducts('audio', this)">🎧 Audio</button>
+  <button class="cat-btn" onclick="filterProducts('wearable', this)">⌚ Wearables</button>
+  <button class="cat-btn" onclick="filterProducts('camera', this)">📷 Cameras</button>
+  <button class="cat-btn" onclick="filterProducts('gaming', this)">🎮 Gaming</button>
+  <button class="cat-btn" onclick="filterProducts('accessory', this)">🖨️ Accessories</button>
+  <button class="cat-btn" onclick="filterProducts('screen', this)">📺 Screens</button>
+</div>
+
+<!-- ── PRODUCTS GRID ── -->
+<main class="products-grid" id="productsGrid">
+
+  <!-- PC & LAPTOPS -->
+  <div class="product-card" data-category="pc">
+    <img class="product-img" src="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=400&q=80" alt="Laptop Pro X">
+    <div class="product-info">
+      <div class="product-name">Laptop Pro X</div>
+      <div class="product-price">$799</div>
+      <div class="product-actions">
+        <button class="btn-cart" onclick="addToCart('Laptop Pro X')"><i class="fa fa-cart-plus"></i> Add</button>
+        <button class="btn-wish" onclick="toggleWish(this)"><i class="fa fa-heart"></i></button>
       </div>
     </div>
-  </section>
-
-  <!-- BANDEAU EDUCATIF -->
-  <div class="banner">
-    🛡️ Ce site est une plateforme éducative — les failles présentées sont intentionnelles et servent uniquement à l'apprentissage de la cybersécurité.
   </div>
 
-  <!-- FOOTER -->
-  <footer class="footer">
-    © 2025 HackTheShop — Projet éducatif cybersécurité
-  </footer>
+  <div class="product-card" data-category="pc">
+    <img class="product-img" src="https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=400&q=80" alt="Gaming Laptop">
+    <div class="product-info">
+      <div class="product-name">Gaming Laptop Z</div>
+      <div class="product-price">$1299</div>
+      <div class="product-actions">
+        <button class="btn-cart" onclick="addToCart('Gaming Laptop Z')"><i class="fa fa-cart-plus"></i> Add</button>
+        <button class="btn-wish" onclick="toggleWish(this)"><i class="fa fa-heart"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="product-card" data-category="pc">
+    <img class="product-img" src="https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=400&q=80" alt="Desktop Ultra">
+    <div class="product-info">
+      <div class="product-name">Desktop Ultra</div>
+      <div class="product-price">$1499</div>
+      <div class="product-actions">
+        <button class="btn-cart" onclick="addToCart('Desktop Ultra')"><i class="fa fa-cart-plus"></i> Add</button>
+        <button class="btn-wish" onclick="toggleWish(this)"><i class="fa fa-heart"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="product-card" data-category="pc">
+    <img class="product-img" src="https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?w=400&q=80" alt="MacBook Air">
+    <div class="product-info">
+      <div class="product-name">MacBook Air M2</div>
+      <div class="product-price">$999</div>
+      <div class="product-actions">
+        <button class="btn-cart" onclick="addToCart('MacBook Air M2')"><i class="fa fa-cart-plus"></i> Add</button>
+        <button class="btn-wish" onclick="toggleWish(this)"><i class="fa fa-heart"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="product-card" data-category="pc">
+    <img class="product-img" src="https://images.unsplash.com/photo-1611078489935-0cb964de46d6?w=400&q=80" alt="Mini PC">
+    <div class="product-info">
+      <div class="product-name">Mini PC Pro</div>
+      <div class="product-price">$499</div>
+      <div class="product-actions">
+        <button class="btn-cart" onclick="addToCart('Mini PC Pro')"><i class="fa fa-cart-plus"></i> Add</button>
+        <button class="btn-wish" onclick="toggleWish(this)"><i class="fa fa-heart"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHONES -->
+  <div class="product-card" data-category="phone">
+    <img class="product-img" src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&q=80" alt="Smartphone">
+    <div class="product-info">
+      <div class="product-name">Smartphone Z12</div>
+      <div class="product-price">$499</div>
+      <div class="product-actions">
+        <button class="btn-cart" onclick="addToCart('Smartphone Z12')"><i class="fa fa-cart-plus"></i> Add</button>
+        <button class="btn-wish" onclick="toggleWish(this)"><i class="fa fa-heart"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="product-card" data-category="phone">
+    <img class="product-img" src="https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=400&q=80" alt="iPhone">
+    <div class="product-info">
+      <div class="product-name">iPhone 15 Pro</div>
+      <div class="product-price">$1099</div>
+      <div class="product-actions">
+        <button class="btn-cart" onclick="addToCart('iPhone 15 Pro')"><i class="fa fa-cart-plus"></i> Add</button>
+        <button class="btn-wish" onclick="toggleWish(this)"><i class="fa fa-heart"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="product-card" data-category="phone">
+    <img class="product-img" src="https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=400&q=80" alt="Samsung">
+    <div class="product-info">
+      <div class="product-name">Samsung S24</div>
+      <div class="product-price">$899</div>
+      <div class="product-actions">
+        <button class="btn-cart" onclick="addToCart('Samsung S24')"><i class="fa fa-cart-plus"></i> Add</button>
+        <button class="btn-wish" onclick="toggleWish(this)"><i class="fa fa-heart"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="product-card" data-category="phone">
+    <img class="product-img" src="https://images.unsplash.com/photo-1544866092-1935c5ef2a8f?w=400&q=80" alt="Tablet">
+    <div class="product-info">
+      <div class="product-name">iPad Pro 12</div>
+      <div class="product-price">$799</div>
+      <div class="product-actions">
+        <button class="btn-cart" onclick="addToCart('iPad Pro 12')"><i class="fa fa-cart-plus"></i> Add</button>
+        <button class="btn-wish" onclick="toggleWish(this)"><i class="fa fa-heart"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="product-card" data-category="phone">
+    <img class="product-img" src="https://images.unsplash.com/photo-1601784551446-20c9e07cdbdb?w=400&q=80" alt="Pixel">
+    <div class="product-info">
+      <div class="product-name">Google Pixel 8</div>
+      <div class="product-price">$699</div>
+      <div class="product-actions">
+        <button class="btn-cart" onclick="addToCart('Google Pixel 8')"><i class="fa fa-cart-plus"></i> Add</button>
+        <button class="btn-wish" onclick="toggleWish(this)"><i class="fa fa-heart"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- AUDIO -->
+  <div class="product-card" data-category="audio">
+    <img class="product-img" src="https://images.unsplash.com/photo-1606220945770-b5b6c2c55bf1?w=400&q=80" alt="AirPods">
+    <div class="product-info">
+      <div class="product-name">AirPods Pro 2</div>
+      <div class="product-price">$249</div>
+      <div class="product-actions">
+        <button class="btn-cart" onclick="addToCart('AirPods Pro 2')"><i class="fa fa-cart-plus"></i> Add</button>
+        <button class="btn-wish" onclick="toggleWish(this)"><i class="fa fa-heart"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="product-card" data-category="audio">
+    <img class="product-img" src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&q=80" alt="Headphones">
+    <div class="product-info">
+      <div class="product-name">Sony WH-1000XM5</div>
+      <div class="product-price">$349</div>
+      <div class="product-actions">
+        <button class="btn-cart" onclick="addToCart('Sony WH-1000XM5')"><i class="fa fa-cart-plus"></i> Add</button>
+        <button class="btn-wish" onclick="toggleWish(this)"><i class="fa fa-heart"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="product-card" data-category="audio">
+    <img class="product-img" src="https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=400&q=80" alt="Speaker">
+    <div class="product-info">
+      <div class="product-name">JBL Charge 5</div>
+      <div class="product-price">$179</div>
+      <div class="product-actions">
+        <button class="btn-cart" onclick="addToCart('JBL Charge 5')"><i class="fa fa-cart-plus"></i> Add</button>
+        <button class="btn-wish" onclick="toggleWish(this)"><i class="fa fa-heart"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="product-card" data-category="audio">
+    <img class="product-img" src="https://images.unsplash.com/photo-1484704849700-f032a568e944?w=400&q=80" alt="Earbuds">
+    <div class="product-info">
+      <div class="product-name">Galaxy Buds Pro</div>
+      <div class="product-price">$199</div>
+      <div class="product-actions">
+        <button class="btn-cart" onclick="addToCart('Galaxy Buds Pro')"><i class="fa fa-cart-plus"></i> Add</button>
+        <button class="btn-wish" onclick="toggleWish(this)"><i class="fa fa-heart"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="product-card" data-category="audio">
+    <img class="product-img" src="https://images.unsplash.com/photo-1558089687-f282ffcbc126?w=400&q=80" alt="Soundbar">
+    <div class="product-info">
+      <div class="product-name">Sonos Soundbar</div>
+      <div class="product-price">$449</div>
+      <div class="product-actions">
+        <button class="btn-cart" onclick="addToCart('Sonos Soundbar')"><i class="fa fa-cart-plus"></i> Add</button>
+        <button class="btn-wish" onclick="toggleWish(this)"><i class="fa fa-heart"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- WEARABLES -->
+  <div class="product-card" data-category="wearable">
+    <img class="product-img" src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&q=80" alt="Watch">
+    <div class="product-info">
+      <div class="product-name">Apple Watch S9</div>
+      <div class="product-price">$399</div>
+      <div class="product-actions">
+        <button class="btn-cart" onclick="addToCart('Apple Watch S9')"><i class="fa fa-cart-plus"></i> Add</button>
+        <button class="btn-wish" onclick="toggleWish(this)"><i class="fa fa-heart"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="product-card" data-category="wearable">
+    <img class="product-img" src="https://images.unsplash.com/photo-1575311373937-040b8e1fd5b6?w=400&q=80" alt="Fitness">
+    <div class="product-info">
+      <div class="product-name">Fitbit Charge 6</div>
+      <div class="product-price">$159</div>
+      <div class="product-actions">
+        <button class="btn-cart" onclick="addToCart('Fitbit Charge 6')"><i class="fa fa-cart-plus"></i> Add</button>
+        <button class="btn-wish" onclick="toggleWish(this)"><i class="fa fa-heart"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="product-card" data-category="wearable">
+    <img class="product-img" src="https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?w=400&q=80" alt="Samsung Watch">
+    <div class="product-info">
+      <div class="product-name">Galaxy Watch 6</div>
+      <div class="product-price">$299</div>
+      <div class="product-actions">
+        <button class="btn-cart" onclick="addToCart('Galaxy Watch 6')"><i class="fa fa-cart-plus"></i> Add</button>
+        <button class="btn-wish" onclick="toggleWish(this)"><i class="fa fa-heart"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="product-card" data-category="wearable">
+    <img class="product-img" src="https://images.unsplash.com/photo-1434494878577-86c23bcb06b9?w=400&q=80" alt="Garmin">
+    <div class="product-info">
+      <div class="product-name">Garmin Fenix 7</div>
+      <div class="product-price">$599</div>
+      <div class="product-actions">
+        <button class="btn-cart" onclick="addToCart('Garmin Fenix 7')"><i class="fa fa-cart-plus"></i> Add</button>
+        <button class="btn-wish" onclick="toggleWish(this)"><i class="fa fa-heart"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="product-card" data-category="wearable">
+    <img class="product-img" src="https://images.unsplash.com/photo-1544117519-31a4b719223d?w=400&q=80" alt="Smart Band">
+    <div class="product-info">
+      <div class="product-name">Xiaomi Band 8</div>
+      <div class="product-price">$49</div>
+      <div class="product-actions">
+        <button class="btn-cart" onclick="addToCart('Xiaomi Band 8')"><i class="fa fa-cart-plus"></i> Add</button>
+        <button class="btn-wish" onclick="toggleWish(this)"><i class="fa fa-heart"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CAMERAS -->
+  <div class="product-card" data-category="camera">
+    <img class="product-img" src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=400&q=80" alt="Camera">
+    <div class="product-info">
+      <div class="product-name">Sony Alpha A7</div>
+      <div class="product-price">$2499</div>
+      <div class="product-actions">
+        <button class="btn-cart" onclick="addToCart('Sony Alpha A7')"><i class="fa fa-cart-plus"></i> Add</button>
+        <button class="btn-wish" onclick="toggleWish(this)"><i class="fa fa-heart"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="product-card" data-category="camera">
+    <img class="product-img" src="https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=400&q=80" alt="Canon">
+    <div class="product-info">
+      <div class="product-name">Canon EOS R50</div>
+      <div class="product-price">$799</div>
+      <div class="product-actions">
+        <button class="btn-cart" onclick="addToCart('Canon EOS R50')"><i class="fa fa-cart-plus"></i> Add</button>
+        <button class="btn-wish" onclick="toggleWish(this)"><i class="fa fa-heart"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="product-card" data-category="camera">
+    <img class="product-img" src="https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=400&q=80" alt="GoPro">
+    <div class="product-info">
+      <div class="product-name">GoPro Hero 12</div>
+      <div class="product-price">$399</div>
+      <div class="product-actions">
+        <button class="btn-cart" onclick="addToCart('GoPro Hero 12')"><i class="fa fa-cart-plus"></i> Add</button>
+        <button class="btn-wish" onclick="toggleWish(this)"><i class="fa fa-heart"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="product-card" data-category="camera">
+    <img class="product-img" src="https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=400&q=80" alt="Polaroid">
+    <div class="product-info">
+      <div class="product-name">Polaroid Now+</div>
+      <div class="product-price">$149</div>
+      <div class="product-actions">
+        <button class="btn-cart" onclick="addToCart('Polaroid Now+')"><i class="fa fa-cart-plus"></i> Add</button>
+        <button class="btn-wish" onclick="toggleWish(this)"><i class="fa fa-heart"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="product-card" data-category="camera">
+    <img class="product-img" src="https://images.unsplash.com/photo-1495707902641-75cac588d2e9?w=400&q=80" alt="Drone">
+    <div class="product-info">
+      <div class="product-name">DJI Mini 4 Pro</div>
+      <div class="product-price">$759</div>
+      <div class="product-actions">
+        <button class="btn-cart" onclick="addToCart('DJI Mini 4 Pro')"><i class="fa fa-cart-plus"></i> Add</button>
+        <button class="btn-wish" onclick="toggleWish(this)"><i class="fa fa-heart"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- GAMING -->
+  <div class="product-card" data-category="gaming">
+    <img class="product-img" src="https://images.unsplash.com/photo-1593118247619-e2d6f056869e?w=400&q=80" alt="PS5">
+    <div class="product-info">
+      <div class="product-name">PlayStation 5</div>
+      <div class="product-price">$499</div>
+      <div class="product-actions">
+        <button class="btn-cart" onclick="addToCart('PlayStation 5')"><i class="fa fa-cart-plus"></i> Add</button>
+        <button class="btn-wish" onclick="toggleWish(this)"><i class="fa fa-heart"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="product-card" data-category="gaming">
+    <img class="product-img" src="https://images.unsplash.com/photo-1612287230202-1ff1d85d1bdf?w=400&q=80" alt="Controller">
+    <div class="product-info">
+      <div class="product-name">Xbox Controller</div>
+      <div class="product-price">$59</div>
+      <div class="product-actions">
+        <button class="btn-cart" onclick="addToCart('Xbox Controller')"><i class="fa fa-cart-plus"></i> Add</button>
+        <button class="btn-wish" onclick="toggleWish(this)"><i class="fa fa-heart"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="product-card" data-category="gaming">
+    <img class="product-img" src="https://images.unsplash.com/photo-1542751371-adc38448a05e?w=400&q=80" alt="Gaming Setup">
+    <div class="product-info">
+      <div class="product-name">Gaming Keyboard</div>
+      <div class="product-price">$129</div>
+      <div class="product-actions">
+        <button class="btn-cart" onclick="addToCart('Gaming Keyboard')"><i class="fa fa-cart-plus"></i> Add</button>
+        <button class="btn-wish" onclick="toggleWish(this)"><i class="fa fa-heart"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="product-card" data-category="gaming">
+    <img class="product-img" src="https://images.unsplash.com/photo-1580327344181-c1163234e5a0?w=400&q=80" alt="Gaming Mouse">
+    <div class="product-info">
+      <div class="product-name">Gaming Mouse Pro</div>
+      <div class="product-price">$79</div>
+      <div class="product-actions">
+        <button class="btn-cart" onclick="addToCart('Gaming Mouse Pro')"><i class="fa fa-cart-plus"></i> Add</button>
+        <button class="btn-wish" onclick="toggleWish(this)"><i class="fa fa-heart"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="product-card" data-category="gaming">
+    <img class="product-img" src="https://images.unsplash.com/photo-1617096200347-cb04ae810b1d?w=400&q=80" alt="Nintendo">
+    <div class="product-info">
+      <div class="product-name">Nintendo Switch</div>
+      <div class="product-price">$299</div>
+      <div class="product-actions">
+        <button class="btn-cart" onclick="addToCart('Nintendo Switch')"><i class="fa fa-cart-plus"></i> Add</button>
+        <button class="btn-wish" onclick="toggleWish(this)"><i class="fa fa-heart"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ACCESSORIES -->
+  <div class="product-card" data-category="accessory">
+    <img class="product-img" src="https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=400&q=80" alt="Mouse">
+    <div class="product-info">
+      <div class="product-name">Logitech MX Master</div>
+      <div class="product-price">$99</div>
+      <div class="product-actions">
+        <button class="btn-cart" onclick="addToCart('Logitech MX Master')"><i class="fa fa-cart-plus"></i> Add</button>
+        <button class="btn-wish" onclick="toggleWish(this)"><i class="fa fa-heart"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="product-card" data-category="accessory">
+    <img class="product-img" src="https://images.unsplash.com/photo-1583394838336-acd977736f90?w=400&q=80" alt="Charger">
+    <div class="product-info">
+      <div class="product-name">USB-C Hub Pro</div>
+      <div class="product-price">$49</div>
+      <div class="product-actions">
+        <button class="btn-cart" onclick="addToCart('USB-C Hub Pro')"><i class="fa fa-cart-plus"></i> Add</button>
+        <button class="btn-wish" onclick="toggleWish(this)"><i class="fa fa-heart"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="product-card" data-category="accessory">
+    <img class="product-img" src="https://images.unsplash.com/photo-1625772299848-391b6a87d7b3?w=400&q=80" alt="Keyboard">
+    <div class="product-info">
+      <div class="product-name">Mechanical Keyboard</div>
+      <div class="product-price">$89</div>
+      <div class="product-actions">
+        <button class="btn-cart" onclick="addToCart('Mechanical Keyboard')"><i class="fa fa-cart-plus"></i> Add</button>
+        <button class="btn-wish" onclick="toggleWish(this)"><i class="fa fa-heart"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="product-card" data-category="accessory">
+    <img class="product-img" src="https://images.unsplash.com/photo-1609081219090-a6d81d3085bf?w=400&q=80" alt="Webcam">
+    <div class="product-info">
+      <div class="product-name">Webcam 4K Pro</div>
+      <div class="product-price">$129</div>
+      <div class="product-actions">
+        <button class="btn-cart" onclick="addToCart('Webcam 4K Pro')"><i class="fa fa-cart-plus"></i> Add</button>
+        <button class="btn-wish" onclick="toggleWish(this)"><i class="fa fa-heart"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="product-card" data-category="accessory">
+    <img class="product-img" src="https://images.unsplash.com/photo-1591370874773-6702e8f12fd8?w=400&q=80" alt="Power Bank">
+    <div class="product-info">
+      <div class="product-name">Power Bank 20000</div>
+      <div class="product-price">$39</div>
+      <div class="product-actions">
+        <button class="btn-cart" onclick="addToCart('Power Bank 20000')"><i class="fa fa-cart-plus"></i> Add</button>
+        <button class="btn-wish" onclick="toggleWish(this)"><i class="fa fa-heart"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCREENS -->
+  <div class="product-card" data-category="screen">
+    <img class="product-img" src="https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=400&q=80" alt="Monitor">
+    <div class="product-info">
+      <div class="product-name">Dell 27" 4K Monitor</div>
+      <div class="product-price">$599</div>
+      <div class="product-actions">
+        <button class="btn-cart" onclick="addToCart('Dell 27 4K Monitor')"><i class="fa fa-cart-plus"></i> Add</button>
+        <button class="btn-wish" onclick="toggleWish(this)"><i class="fa fa-heart"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="product-card" data-category="screen">
+    <img class="product-img" src="https://images.unsplash.com/photo-1593359677879-a4bb92f4834c?w=400&q=80" alt="Smart TV">
+    <div class="product-info">
+      <div class="product-name">Samsung Smart TV 55"</div>
+      <div class="product-price">$799</div>
+      <div class="product-actions">
+        <button class="btn-cart" onclick="addToCart('Samsung Smart TV')"><i class="fa fa-cart-plus"></i> Add</button>
+        <button class="btn-wish" onclick="toggleWish(this)"><i class="fa fa-heart"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="product-card" data-category="screen">
+    <img class="product-img" src="https://images.unsplash.com/photo-1616763355548-1b606f439f86?w=400&q=80" alt="Curved Monitor">
+    <div class="product-info">
+      <div class="product-name">LG Curved 34"</div>
+      <div class="product-price">$699</div>
+      <div class="product-actions">
+        <button class="btn-cart" onclick="addToCart('LG Curved 34')"><i class="fa fa-cart-plus"></i> Add</button>
+        <button class="btn-wish" onclick="toggleWish(this)"><i class="fa fa-heart"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="product-card" data-category="screen">
+    <img class="product-img" src="https://images.unsplash.com/photo-1598986646512-9330bcc4c0dc?w=400&q=80" alt="Gaming Monitor">
+    <div class="product-info">
+      <div class="product-name">Gaming Monitor 144Hz</div>
+      <div class="product-price">$349</div>
+      <div class="product-actions">
+        <button class="btn-cart" onclick="addToCart('Gaming Monitor 144Hz')"><i class="fa fa-cart-plus"></i> Add</button>
+        <button class="btn-wish" onclick="toggleWish(this)"><i class="fa fa-heart"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="product-card" data-category="screen">
+    <img class="product-img" src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80" alt="Projector">
+    <div class="product-info">
+      <div class="product-name">Mini Projector 4K</div>
+      <div class="product-price">$299</div>
+      <div class="product-actions">
+        <button class="btn-cart" onclick="addToCart('Mini Projector 4K')"><i class="fa fa-cart-plus"></i> Add</button>
+        <button class="btn-wish" onclick="toggleWish(this)"><i class="fa fa-heart"></i></button>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+    <!-- ── CART PANEL ── -->
+    <div class="panel" id="cartPanel">
+      <div class="panel-header">
+        🛒 Cart
+        <button onclick="toggleCart()">✕</button>
+      </div>
+      <div class="panel-body" id="cartItems">
+        <p class="empty-msg">Your cart is empty.</p>
+      </div>
+    </div>
+
+    <!-- ── WISHLIST PANEL ── -->
+    <div class="panel" id="wishPanel">
+      <div class="panel-header">
+        ❤️ Wishlist
+        <button onclick="toggleWishlist()">✕</button>
+      </div>
+      <div class="panel-body" id="wishItems">
+        <p class="empty-msg">Your wishlist is empty.</p>
+      </div>
+    </div>
+
+    <!-- ── CHATBOT BUBBLE ── -->
+    <div class="chatbot-bubble" onclick="toggleChatbot()">
+      <i class="fa fa-comment"></i>
+    </div>
+
+    <div class="chatbot-frame" id="chatbotFrame">
+      <iframe src="chatbot.php" frameborder="0"></iframe>
+    </div>
+
+    <!-- ── FOOTER ── -->
+    <footer class="footer">
+      © 2025 HackTheShop — Educational Cybersecurity Project
+    </footer>
+
+  </div>
 
   <script src="js/main.js"></script>
 </body>
