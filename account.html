@@ -151,6 +151,14 @@
       <iframe src="chatbot.php" frameborder="0"></iframe>
     </div>
 
+    <!-- ACCOUNT MODAL -->
+    <div class="account-modal" id="accountModal">
+      <div class="modal-box">
+        <button class="modal-close" onclick="closeModal()">✕</button>
+        <div id="modalContent"></div>
+      </div>
+    </div>
+
     <footer class="footer">
       © 2025 HackTheShop — Educational Cybersecurity Project
     </footer>
@@ -158,5 +166,134 @@
   </div>
 
   <script src="js/main.js"></script>
+  <script>
+    const accountItems = document.querySelectorAll('.account-item');
+
+    // MY ORDERS
+    accountItems[0].addEventListener('click', () => {
+      showModal(`
+        <h3><i class="fa fa-box"></i> My Orders</h3>
+        <div class="modal-list">
+          <div class="modal-item">
+            <span>#ORD-001 — Laptop Pro X</span>
+            <span class="badge-delivered">Delivered</span>
+          </div>
+          <div class="modal-item">
+            <span>#ORD-002 — AirPods Pro 2</span>
+            <span class="badge-shipping">Shipping</span>
+          </div>
+          <div class="modal-item">
+            <span>#ORD-003 — PlayStation 5</span>
+            <span class="badge-pending">Pending</span>
+          </div>
+        </div>
+      `);
+    });
+
+    // WISHLIST
+    accountItems[1].addEventListener('click', () => {
+      document.getElementById('wishPanel').classList.add('open');
+    });
+
+    // ADDRESSES
+    accountItems[2].addEventListener('click', () => {
+      showModal(`
+        <h3><i class="fa fa-map-marker"></i> My Addresses</h3>
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" placeholder="John Doe">
+        </div>
+        <div class="form-group">
+          <label>Street</label>
+          <input type="text" placeholder="123 Main Street">
+        </div>
+        <div class="form-group">
+          <label>City</label>
+          <input type="text" placeholder="New York">
+        </div>
+        <div class="form-group">
+          <label>Zip Code</label>
+          <input type="text" placeholder="10001">
+        </div>
+        <button class="login-btn" onclick="closeModal()">Save Address</button>
+      `);
+    });
+
+    // PAYMENT
+    accountItems[3].addEventListener('click', () => {
+      showModal(`
+        <h3><i class="fa fa-credit-card"></i> Payment Methods</h3>
+        <div class="modal-list">
+          <div class="modal-item">
+            <span>💳 Visa **** 4242</span>
+            <span class="badge-delivered">Default</span>
+          </div>
+          <div class="modal-item">
+            <span>💳 Mastercard **** 5353</span>
+            <span class="badge-pending">Secondary</span>
+          </div>
+        </div>
+        <button class="login-btn" style="margin-top:16px;" onclick="closeModal()">Add New Card</button>
+      `);
+    });
+
+    // NOTIFICATIONS
+    accountItems[4].addEventListener('click', () => {
+      showModal(`
+        <h3><i class="fa fa-bell"></i> Notifications</h3>
+        <div class="modal-list">
+          <div class="modal-item">
+            <span>🔥 Flash Sale starts in 2 hours!</span>
+            <span class="badge-shipping">New</span>
+          </div>
+          <div class="modal-item">
+            <span>📦 Your order #ORD-002 has shipped</span>
+            <span class="badge-shipping">New</span>
+          </div>
+          <div class="modal-item">
+            <span>✅ Order #ORD-001 delivered</span>
+            <span class="badge-delivered">Read</span>
+          </div>
+        </div>
+      `);
+    });
+
+    // SETTINGS
+    accountItems[5].addEventListener('click', () => {
+      showModal(`
+        <h3><i class="fa fa-gear"></i> Settings</h3>
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" placeholder="John Doe">
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" placeholder="john@email.com">
+        </div>
+        <div class="form-group">
+          <label>New Password</label>
+          <input type="password" placeholder="••••••••">
+        </div>
+        <button class="login-btn" onclick="closeModal()">Save Changes</button>
+      `);
+    });
+
+    // LOGOUT
+    document.querySelector('.logout-btn').addEventListener('click', () => {
+      window.location.href = 'login.html';
+    });
+
+    // MODAL FUNCTIONS
+    function showModal(content) {
+      const modal = document.getElementById('accountModal');
+      document.getElementById('modalContent').innerHTML = content;
+      modal.classList.add('open');
+    }
+
+    function closeModal() {
+      document.getElementById('accountModal').classList.remove('open');
+    }
+  </script>
+
 </body>
 </html>
