@@ -1,135 +1,93 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HackTheShop - Produits</title>
+  <title>HackTheShop - Products</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
-  <!-- NAVBAR -->
-  <nav class="navbar">
-    <span class="logo">HackTheShop</span>
-    <ul class="nav-links">
-      <li><a href="index.html">Accueil</a></li>
-      <li><a href="products.html">Produits</a></li>
-      <li><a href="login.html">Connexion</a></li>
-      <li><a href="search.html">Recherche</a></li>
-    </ul>
-    <button class="cart-btn">🛒 Panier (0)</button>
-  </nav>
+  <!-- PARTICLES -->
+  <canvas id="particles"></canvas>
 
-  <!-- CATALOGUE PRODUITS -->
-  <section class="products">
-    <h2 class="section-title">Nos Produits</h2>
-    <div class="grid">
-      <div class="card">
-        <div class="card-img">💻</div>
-        <div class="card-body">
-          <div class="card-title">Laptop Pro X</div>
-          <div><span class="card-price">799€</span><span class="card-old">999€</span></div>
-          <button class="add-btn">Ajouter au panier</button>
+  <div class="wrapper">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <button class="close-sidebar" onclick="toggleSidebar()">✕</button>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="login.html"><i class="fa fa-user"></i> Login</a>
+        <a href="#"><i class="fa fa-tag"></i> Promotions</a>
+        <a href="#"><i class="fa fa-circle-user"></i> Your Account</a>
+        <a href="#"><i class="fa fa-headset"></i> Customer Service</a>
+      </nav>
+    </aside>
+
+    <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+      <div class="nav-left">
+        <button class="burger" onclick="toggleSidebar()">
+          <i class="fa fa-bars"></i>
+        </button>
+        <a href="login.html" class="nav-login">Login</a>
+      </div>
+      <div class="nav-center">
+        <a href="index.html" style="text-decoration:none;">
+          <span class="logo">HackTheShop</span>
+        </a>
+      </div>
+      <div class="nav-right">
+        <button class="nav-icon"><i class="fa fa-search"></i></button>
+        <button class="nav-icon"><i class="fa fa-heart"></i></button>
+        <button class="nav-icon"><i class="fa fa-shopping-cart"></i></button>
+      </div>
+    </nav>
+
+    <!-- COMMENTS SECTION -->
+    <section class="comments-section">
+      <h2 class="section-title">Customer Reviews</h2>
+
+      <div class="comments-list" id="commentsList">
+        <div class="comment-card">
+          <div class="comment-author">Ahmed B.</div>
+          <div class="comment-text">Great product, highly recommend!</div>
+        </div>
+        <div class="comment-card">
+          <div class="comment-author">Sara M.</div>
+          <div class="comment-text">Fast delivery, excellent quality.</div>
         </div>
       </div>
-      <div class="card">
-        <div class="card-img">📱</div>
-        <div class="card-body">
-          <div class="card-title">Smartphone Z12</div>
-          <div><span class="card-price">499€</span><span class="card-old">649€</span></div>
-          <button class="add-btn">Ajouter au panier</button>
+
+      <div class="comment-form">
+        <h3>Leave a Review</h3>
+        <div class="form-group">
+          <label>Your Name</label>
+          <input type="text" id="commentAuthor" placeholder="Your name">
         </div>
-      </div>
-      <div class="card">
-        <div class="card-img">🎧</div>
-        <div class="card-body">
-          <div class="card-title">Casque Audio Pro</div>
-          <div><span class="card-price">149€</span><span class="card-old">199€</span></div>
-          <button class="add-btn">Ajouter au panier</button>
+        <div class="form-group">
+          <label>Your Review</label>
+          <textarea id="commentText" rows="4" placeholder="Write your review..."></textarea>
         </div>
+        <button class="login-btn" onclick="addComment()">Post Review</button>
       </div>
-      <div class="card">
-        <div class="card-img">⌚</div>
-        <div class="card-body">
-          <div class="card-title">Montre Connect</div>
-          <div><span class="card-price">249€</span><span class="card-old">329€</span></div>
-          <button class="add-btn">Ajouter au panier</button>
-        </div>
-      </div>
-    </div>
-  </section>
 
-  <!-- SECTION COMMENTAIRES (XSS STOCKÉ) -->
-  <section class="comments-section">
-    <h2 class="section-title">Avis clients</h2>
 
-    <!-- Commentaires existants -->
-    <div class="comments-list" id="commentsList">
-      <div class="comment-card">
-        <div class="comment-author">Ahmed B.</div>
-        <div class="comment-text">Très bon produit, je recommande !</div>
-      </div>
-      <div class="comment-card">
-        <div class="comment-author">Sara M.</div>
-        <div class="comment-text">Livraison rapide, qualité au rendez-vous.</div>
-      </div>
-    </div>
+    </section>
 
-    <!-- Formulaire commentaire vulnérable -->
-    <div class="comment-form">
-      <h3>Laisser un avis</h3>
-      <div class="form-group">
-        <label>Votre nom</label>
-        <input type="text" id="commentAuthor" placeholder="Votre nom">
-      </div>
-      <div class="form-group">
-        <label>Votre commentaire</label>
-        <textarea id="commentText" rows="4" placeholder="Écrivez votre avis..."></textarea>
-      </div>
-      <button class="login-btn" onclick="addComment()">Publier</button>
-    </div>
-  </section>
+    <!-- FOOTER -->
+    <footer class="footer">
+      © 2025 HackTheShop — Educational Cybersecurity Project
+    </footer>
 
-  <!-- PANNEAU EDUCATIF XSS STOCKÉ -->
-  <section class="edu-section">
-    <div class="edu-box">
-      <div class="edu-header">
-        🛡️ Zone Éducative — XSS Stocké
-      </div>
-      <div class="edu-content">
+  </div>
 
-        <div class="edu-block">
-          <h3>📌 C'est quoi XSS Stocké ?</h3>
-          <p>XSS Stocké (Cross-Site Scripting) est une attaque où un hacker injecte du code JavaScript malveillant dans un formulaire. Ce code est sauvegardé en base de données et s'exécute chez tous les visiteurs qui voient la page.</p>
-        </div>
-
-        <div class="edu-block warning">
-          <h3>⚠️ Comment tester ici ?</h3>
-          <p>Ce formulaire de commentaires est volontairement vulnérable. Tape ceci dans le champ commentaire :</p>
-          <div class="code-block">
-            &lt;script&gt;alert('XSS Stocké !')&lt;/script&gt;
-          </div>
-          <p>Une alerte va s'afficher — c'est du XSS Stocké en action !</p>
-        </div>
-
-        <div class="edu-block success">
-          <h3>✅ Comment se protéger ?</h3>
-          <p>Toujours échapper les données avant de les afficher en HTML :</p>
-          <div class="code-block">
-            // En PHP<br>
-            echo htmlspecialchars($commentaire);
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer class="footer">
-    © 2025 HackTheShop — Projet éducatif cybersécurité
-  </footer>
-
+  <script src="js/main.js"></script>
   <script src="js/demo.js"></script>
 </body>
 </html>

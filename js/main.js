@@ -106,18 +106,42 @@ function toggleCart() {
 function addToCart(name) {
   cart.push(name);
   document.getElementById('cartCount').textContent = cart.length;
-
-  const cartItems = document.getElementById('cartItems');
-  cartItems.innerHTML = '';
-  cart.forEach(item => {
-    const div = document.createElement('div');
-    div.className = 'cart-item';
-    div.innerHTML = `<span>${item}</span><span style="color:#a78bfa;">Added ✓</span>`;
-    cartItems.appendChild(div);
-  });
-
+  renderCart();
   document.getElementById('cartPanel').classList.add('open');
   document.getElementById('wishPanel').classList.remove('open');
+}
+
+function removeFromCart(index) {
+  cart.splice(index, 1);
+  document.getElementById('cartCount').textContent = cart.length;
+  renderCart();
+}
+
+function renderCart() {
+  const cartItems = document.getElementById('cartItems');
+  if (cart.length === 0) {
+    cartItems.innerHTML = '<p class="empty-msg">Your cart is empty.</p>';
+    return;
+  }
+  cartItems.innerHTML = '';
+  cart.forEach((item, index) => {
+    const div = document.createElement('div');
+    div.className = 'cart-item';
+    div.innerHTML = `
+      <span>${item}</span>
+      <button onclick="removeFromCart(${index})" style="
+        background: transparent;
+        border: 1px solid #7c3aed;
+        color: #f472b6;
+        border-radius: 6px;
+        padding: 4px 8px;
+        cursor: pointer;
+        font-size: 11px;
+        font-family: 'Courier New', monospace;
+      ">Remove</button>
+    `;
+    cartItems.appendChild(div);
+  });
 }
 
 
