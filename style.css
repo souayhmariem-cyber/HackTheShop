@@ -1036,3 +1036,133 @@ textarea:focus {
   border-radius: 20px;
   border: 1px solid #7c3aed;
 }
+
+/* ── CUSTOMER SERVICE ── */
+.cs-section {
+  padding: 40px 24px;
+  max-width: 1000px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.cs-header {
+  text-align: center;
+}
+
+.cs-header h2 {
+  font-size: 26px;
+  color: #a78bfa;
+  margin-bottom: 8px;
+  letter-spacing: 1px;
+}
+
+.cs-header p {
+  color: #534AB7;
+  font-size: 14px;
+}
+
+.cs-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.cs-box {
+  background: #0d0d14;
+  border: 1px solid #3b2f6e;
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.cs-box h3 {
+  font-size: 15px;
+  color: #a78bfa;
+  letter-spacing: 1px;
+}
+
+select {
+  width: 100%;
+  padding: 11px 16px;
+  background: #13131f;
+  border: 1px solid #3b2f6e;
+  border-radius: 25px;
+  color: #e2d9f3;
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  outline: none;
+}
+
+select:focus {
+  border-color: #7c3aed;
+}
+
+.cs-chat-desc {
+  color: #534AB7;
+  font-size: 13px;
+}
+
+.cs-chat-preview {
+  background: #080810;
+  border: 1px solid #1e1a2e;
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cs-chat-msg {
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: 12px;
+  line-height: 1.5;
+  max-width: 85%;
+}
+
+.cs-chat-msg.bot {
+  background: #13131f;
+  color: #e2d9f3;
+  border: 1px solid #3b2f6e;
+  align-self: flex-start;
+}
+
+.cs-chat-msg.user {
+  background: #1e0a3c;
+  color: #d8b4fe;
+  border: 1px solid #7c3aed;
+  align-self: flex-end;
+}
+
+.cs-info-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.cs-info-item {
+  background: #0d0d14;
+  border: 1px solid #3b2f6e;
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  color: #a78bfa;
+  font-size: 20px;
+}
+
+.cs-info-title {
+  font-size: 13px;
+  color: #a78bfa;
+  margin-bottom: 4px;
+}
+
+.cs-info-desc {
+  font-size: 12px;
+  color: #534AB7;
+}
