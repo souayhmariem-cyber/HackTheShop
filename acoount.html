@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HackTheShop - My Account</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <canvas id="particles"></canvas>
+
+  <div class="wrapper">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <button class="close-sidebar" onclick="toggleSidebar()">✕</button>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="login.html"><i class="fa fa-user"></i> Login</a>
+        <a href="promotions.html"><i class="fa fa-tag"></i> Promotions</a>
+        <a href="account.html"><i class="fa fa-circle-user"></i> Your Account</a>
+        <a href="#"><i class="fa fa-headset"></i> Customer Service</a>
+      </nav>
+    </aside>
+
+    <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+      <div class="nav-left">
+        <button class="burger" onclick="toggleSidebar()">
+          <i class="fa fa-bars"></i>
+        </button>
+        <a href="login.html" class="nav-login">Login</a>
+      </div>
+      <div class="nav-center">
+        <a href="index.html" style="text-decoration:none;">
+          <span class="logo">HackTheShop</span>
+        </a>
+      </div>
+      <div class="nav-right">
+        <button class="nav-icon" onclick="toggleSearch()"><i class="fa fa-search"></i></button>
+        <button class="nav-icon" onclick="toggleWishlist()"><i class="fa fa-heart"></i></button>
+        <button class="nav-icon" onclick="toggleCart()">
+          <i class="fa fa-shopping-cart"></i>
+          <span class="cart-count" id="cartCount">0</span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- SEARCH DROPDOWN -->
+    <div class="search-dropdown" id="searchDropdown">
+      <input type="text" id="searchInput" placeholder="Search products...">
+      <button onclick="searchProducts()"><i class="fa fa-search"></i></button>
+    </div>
+
+    <!-- ACCOUNT SECTION -->
+    <section class="account-section">
+
+      <!-- PROFILE CARD -->
+      <div class="account-card">
+        <div class="account-avatar">
+          <i class="fa fa-user"></i>
+        </div>
+        <div class="account-info">
+          <h2>John Doe</h2>
+          <p>john.doe@email.com</p>
+          <span class="account-badge">Premium Member</span>
+        </div>
+      </div>
+
+      <!-- ACCOUNT MENU -->
+      <div class="account-grid">
+
+        <div class="account-item">
+          <div class="account-icon"><i class="fa fa-box"></i></div>
+          <div class="account-label">My Orders</div>
+          <div class="account-desc">Track and manage your orders</div>
+        </div>
+
+        <div class="account-item">
+          <div class="account-icon"><i class="fa fa-heart"></i></div>
+          <div class="account-label">Wishlist</div>
+          <div class="account-desc">Your saved items</div>
+        </div>
+
+        <div class="account-item">
+          <div class="account-icon"><i class="fa fa-map-marker"></i></div>
+          <div class="account-label">Addresses</div>
+          <div class="account-desc">Manage delivery addresses</div>
+        </div>
+
+        <div class="account-item">
+          <div class="account-icon"><i class="fa fa-credit-card"></i></div>
+          <div class="account-label">Payment</div>
+          <div class="account-desc">Manage payment methods</div>
+        </div>
+
+        <div class="account-item">
+          <div class="account-icon"><i class="fa fa-bell"></i></div>
+          <div class="account-label">Notifications</div>
+          <div class="account-desc">Manage your alerts</div>
+        </div>
+
+        <div class="account-item">
+          <div class="account-icon"><i class="fa fa-gear"></i></div>
+          <div class="account-label">Settings</div>
+          <div class="account-desc">Account preferences</div>
+        </div>
+
+      </div>
+
+      <!-- LOGOUT -->
+      <button class="logout-btn">
+        <i class="fa fa-right-from-bracket"></i> Log Out
+      </button>
+
+    </section>
+
+    <!-- CART PANEL -->
+    <div class="panel" id="cartPanel">
+      <div class="panel-header">
+        🛒 Cart
+        <button onclick="toggleCart()">✕</button>
+      </div>
+      <div class="panel-body" id="cartItems">
+        <p class="empty-msg">Your cart is empty.</p>
+      </div>
+    </div>
+
+    <!-- WISHLIST PANEL -->
+    <div class="panel" id="wishPanel">
+      <div class="panel-header">
+        ❤️ Wishlist
+        <button onclick="toggleWishlist()">✕</button>
+      </div>
+      <div class="panel-body" id="wishItems">
+        <p class="empty-msg">Your wishlist is empty.</p>
+      </div>
+    </div>
+
+    <!-- CHATBOT BUBBLE -->
+    <div class="chatbot-bubble" onclick="toggleChatbot()">
+      <i class="fa fa-comment"></i>
+    </div>
+
+    <div class="chatbot-frame" id="chatbotFrame">
+      <iframe src="chatbot.php" frameborder="0"></iframe>
+    </div>
+
+    <footer class="footer">
+      © 2025 HackTheShop — Educational Cybersecurity Project
+    </footer>
+
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

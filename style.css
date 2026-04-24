@@ -788,3 +788,159 @@ textarea:focus {
   text-align: center;
   margin-top: 40px;
 }
+
+/* ── PROMOTIONS ── */
+.promo-banner {
+  background: linear-gradient(90deg, #7c3aed, #4f46e5);
+  color: white;
+  text-align: center;
+  padding: 12px;
+  font-size: 14px;
+  letter-spacing: 1px;
+  font-family: 'Courier New', monospace;
+}
+
+.promo-section {
+  padding: 32px 24px;
+}
+
+.promo-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: #7c3aed;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-family: 'Courier New', monospace;
+  z-index: 1;
+}
+
+.product-card {
+  position: relative;
+}
+
+.promo-prices {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.old-price {
+  color: #534AB7;
+  font-size: 12px;
+  text-decoration: line-through;
+}
+/* ── ACCOUNT ── */
+.account-section {
+  padding: 40px 24px;
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.account-card {
+  background: #0d0d14;
+  border: 1px solid #7c3aed;
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  box-shadow: 0 0 30px rgba(124, 58, 237, 0.15);
+}
+
+.account-avatar {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: #13131f;
+  border: 2px solid #7c3aed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  color: #a78bfa;
+}
+
+.account-info h2 {
+  font-size: 18px;
+  color: #a78bfa;
+  margin-bottom: 4px;
+}
+
+.account-info p {
+  font-size: 13px;
+  color: #534AB7;
+  margin-bottom: 8px;
+}
+
+.account-badge {
+  background: #1e0a3c;
+  color: #a78bfa;
+  font-size: 11px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  border: 1px solid #7c3aed;
+}
+
+.account-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.account-item {
+  background: #0d0d14;
+  border: 1px solid #3b2f6e;
+  border-radius: 12px;
+  padding: 20px;
+  cursor: pointer;
+  transition: border-color 0.2s, transform 0.2s;
+  text-align: center;
+}
+
+.account-item:hover {
+  border-color: #7c3aed;
+  transform: translateY(-4px);
+}
+
+.account-icon {
+  font-size: 24px;
+  color: #a78bfa;
+  margin-bottom: 10px;
+}
+
+.account-label {
+  font-size: 14px;
+  color: #e2d9f3;
+  margin-bottom: 4px;
+}
+
+.account-desc {
+  font-size: 11px;
+  color: #534AB7;
+}
+
+.logout-btn {
+  background: transparent;
+  border: 1px solid #7c3aed;
+  color: #f472b6;
+  padding: 12px 24px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  letter-spacing: 1px;
+  transition: all 0.2s;
+  align-self: center;
+}
+
+.logout-btn:hover {
+  background: #1e0a3c;
+}

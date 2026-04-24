@@ -15,56 +15,95 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if ($user) {
       $_SESSION['user'] = $user['nom'];
-      header('Location: ../index.html');
-      exit;
     } else {
-      $error = "Email ou mot de passe incorrect !";
+      $error = "Invalid email or password!";
     }
   } catch(PDOException $e) {
-    $error = "Erreur : " . $e->getMessage();
+    $error = "Error : " . $e->getMessage();
   }
 }
 ?>
 
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Résultat Connexion</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HackTheShop - Login</title>
   <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
-  <nav class="navbar">
-    <span class="logo">HackTheShop</span>
-    <ul class="nav-links">
-      <li><a href="../index.html">Accueil</a></li>
-      <li><a href="../products.html">Produits</a></li>
-      <li><a href="../login.html">Connexion</a></li>
-      <li><a href="../search.html">Recherche</a></li>
-    </ul>
-    <button class="cart-btn">🛒 Panier (0)</button>
-  </nav>
+  <canvas id="particles"></canvas>
 
-  <section class="login-section">
-    <div class="login-box">
-      <?php if (isset($error)): ?>
-        <div class="error-msg">❌ <?php echo $error; ?></div>
-      <?php endif; ?>
+  <div class="wrapper">
 
-      <?php if (isset($_SESSION['user'])): ?>
-        <div class="success-msg">✅ Bienvenue <?php echo $_SESSION['user']; ?> !</div>
-      <?php endif; ?>
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <button class="close-sidebar" onclick="toggleSidebar()">✕</button>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="../login.html"><i class="fa fa-user"></i> Login</a>
+        <a href="#"><i class="fa fa-tag"></i> Promotions</a>
+        <a href="#"><i class="fa fa-circle-user"></i> Your Account</a>
+        <a href="#"><i class="fa fa-headset"></i> Customer Service</a>
+      </nav>
+    </aside>
 
-      <a href="../login.html" class="login-btn" style="display:block; text-align:center; text-decoration:none; margin-top:16px;">
-        Retour à la connexion
-      </a>
-    </div>
-  </section>
+    <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
 
-  <footer class="footer">
-    © 2025 HackTheShop — Projet éducatif cybersécurité
-  </footer>
+    <!-- NAVBAR -->
+    <nav class="navbar">
+      <div class="nav-left">
+        <button class="burger" onclick="toggleSidebar()">
+          <i class="fa fa-bars"></i>
+        </button>
+        <a href="../login.html" class="nav-login">Login</a>
+      </div>
+      <div class="nav-center">
+        <a href="../index.html" style="text-decoration:none;">
+          <span class="logo">HackTheShop</span>
+        </a>
+      </div>
+      <div class="nav-right">
+        <button class="nav-icon"><i class="fa fa-search"></i></button>
+        <button class="nav-icon"><i class="fa fa-heart"></i></button>
+        <button class="nav-icon"><i class="fa fa-shopping-cart"></i></button>
+      </div>
+    </nav>
 
+    <!-- RESULT -->
+    <section class="login-section">
+      <div class="login-box">
+
+        <?php if (isset($error)): ?>
+          <div class="error-msg">❌ <?php echo $error; ?></div>
+        <?php endif; ?>
+
+        <?php if (isset($_SESSION['user'])): ?>
+          <div class="success-msg">
+            ✅ Welcome back, <strong><?php echo $_SESSION['user']; ?></strong>!
+          </div>
+          <a href="../index.html" class="login-btn" style="display:block; text-align:center; text-decoration:none; margin-top:16px;">
+            Back to Shop
+          </a>
+        <?php else: ?>
+          <a href="../login.html" class="login-btn" style="display:block; text-align:center; text-decoration:none; margin-top:16px;">
+            Try Again
+          </a>
+        <?php endif; ?>
+
+      </div>
+    </section>
+
+    <footer class="footer">
+      © 2025 HackTheShop — Educational Cybersecurity Project
+    </footer>
+
+  </div>
+
+  <script src="../js/main.js"></script>
 </body>
 </html>
