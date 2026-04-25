@@ -1065,8 +1065,10 @@ textarea:focus {
 
 .cs-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   gap: 24px;
+  max-width: 600px;
+  margin: 0 auto;
 }
 
 .cs-box {

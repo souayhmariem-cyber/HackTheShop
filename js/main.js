@@ -142,15 +142,6 @@ function renderCart() {
     `;
     cartItems.appendChild(div);
   });
-  /* ═══════════════════════════════════
-   CUSTOMER SERVICE SUBMENU
-   ═══════════════════════════════════ */
-function toggleCSMenu(e) {
-  e.preventDefault();
-  document.getElementById('csSubmenu').classList.toggle('open');
-  document.getElementById('csChevron').classList.toggle('fa-chevron-down');
-  document.getElementById('csChevron').classList.toggle('fa-chevron-up');
-}
 }
 
 
@@ -214,4 +205,15 @@ function filterProducts(category, btn) {
    ═══════════════════════════════════ */
 function toggleChatbot() {
   document.getElementById('chatbotFrame').classList.toggle('open');
+}
+
+
+/* ═══════════════════════════════════
+   CUSTOMER SERVICE SUBMENU
+   ═══════════════════════════════════ */
+function toggleCSMenu(e) {
+  e.preventDefault();
+  document.getElementById('csSubmenu').classList.toggle('open');
+  document.getElementById('csChevron').classList.toggle('fa-chevron-down');
+  document.getElementById('csChevron').classList.toggle('fa-chevron-up');
 }
