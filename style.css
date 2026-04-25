@@ -1166,3 +1166,25 @@ select:focus {
   font-size: 12px;
   color: #534AB7;
 }
+/* ── SIDEBAR SUBMENU ── */
+.sidebar-submenu {
+  display: none;
+  flex-direction: column;
+  background: #080810;
+}
+
+.sidebar-submenu.open {
+  display: flex;
+}
+
+.sidebar-submenu a {
+  padding: 10px 24px 10px 40px !important;
+  font-size: 13px !important;
+  border-bottom: 1px solid #1e1a2e !important;
+  color: #7c3aed !important;
+}
+
+.sidebar-submenu a:hover {
+  color: #a78bfa !important;
+  background: #1e0a3c !important;
+}

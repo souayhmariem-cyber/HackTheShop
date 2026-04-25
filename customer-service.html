@@ -22,7 +22,14 @@
         <a href="login.html"><i class="fa fa-user"></i> Login</a>
         <a href="promotions.html"><i class="fa fa-tag"></i> Promotions</a>
         <a href="account.html"><i class="fa fa-circle-user"></i> Your Account</a>
-        <a href="customer-service.html"><i class="fa fa-headset"></i> Customer Service</a>
+        <a href="#" onclick="toggleCSMenu(event)">
+          <i class="fa fa-headset"></i> Customer Service
+          <i class="fa fa-chevron-down" id="csChevron"></i>
+        </a>
+        <div class="sidebar-submenu" id="csSubmenu">
+          <a href="chatbot.php"><i class="fa fa-comment"></i> Chat with Echo</a>
+          <a href="customer-service.html"><i class="fa fa-envelope"></i> Contact Us</a>
+        </div>
       </nav>
     </aside>
 
@@ -60,13 +67,11 @@
     <!-- CUSTOMER SERVICE SECTION -->
     <section class="cs-section">
 
-      <!-- HEADER -->
       <div class="cs-header">
         <h2>🎧 Customer Service</h2>
         <p>We're here to help you 24/7</p>
       </div>
 
-      <!-- TWO COLUMNS -->
       <div class="cs-grid">
 
         <!-- CONTACT FORM -->
@@ -106,7 +111,7 @@
         <!-- CHATBOT -->
         <div class="cs-box cs-chat">
           <h3><i class="fa fa-comment"></i> Chat with Echo</h3>
-          <p class="cs-chat-desc">Get instant answers from our AI assistant Echo !</p>
+          <p class="cs-chat-desc">Get instant answers from our AI assistant Echo!</p>
           <div class="cs-chat-preview">
             <div class="cs-chat-msg bot">
               👋 Hello! I'm Echo, your HackTheShop assistant. How can I help you today?

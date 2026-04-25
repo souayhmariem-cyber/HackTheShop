@@ -22,7 +22,14 @@
         <a href="login.html"><i class="fa fa-user"></i> Login</a>
         <a href="promotions.html"><i class="fa fa-tag"></i> Promotions</a>
         <a href="account.html"><i class="fa fa-circle-user"></i> Your Account</a>
-        <a href="customer-service.html"><i class="fa fa-headset"></i> Customer Service</a>
+        <a href="#" onclick="toggleCSMenu(event)">
+          <i class="fa fa-headset"></i> Customer Service
+          <i class="fa fa-chevron-down" id="csChevron"></i>
+        </a>
+        <div class="sidebar-submenu" id="csSubmenu">
+          <a href="chatbot.php"><i class="fa fa-comment"></i> Chat with Echo</a>
+          <a href="customer-service.html"><i class="fa fa-envelope"></i> Contact Us</a>
+        </div>
       </nav>
     </aside>
 
@@ -60,7 +67,6 @@
     <!-- ACCOUNT SECTION -->
     <section class="account-section">
 
-      <!-- PROFILE CARD -->
       <div class="account-card">
         <div class="account-avatar">
           <i class="fa fa-user"></i>
@@ -72,7 +78,6 @@
         </div>
       </div>
 
-      <!-- ACCOUNT MENU -->
       <div class="account-grid">
 
         <div class="account-item">
@@ -113,7 +118,6 @@
 
       </div>
 
-      <!-- LOGOUT -->
       <button class="logout-btn">
         <i class="fa fa-right-from-bracket"></i> Log Out
       </button>
@@ -169,7 +173,6 @@
   <script>
     const accountItems = document.querySelectorAll('.account-item');
 
-    // MY ORDERS
     accountItems[0].addEventListener('click', () => {
       showModal(`
         <h3><i class="fa fa-box"></i> My Orders</h3>
@@ -190,12 +193,10 @@
       `);
     });
 
-    // WISHLIST
     accountItems[1].addEventListener('click', () => {
       document.getElementById('wishPanel').classList.add('open');
     });
 
-    // ADDRESSES
     accountItems[2].addEventListener('click', () => {
       showModal(`
         <h3><i class="fa fa-map-marker"></i> My Addresses</h3>
@@ -219,7 +220,6 @@
       `);
     });
 
-    // PAYMENT
     accountItems[3].addEventListener('click', () => {
       showModal(`
         <h3><i class="fa fa-credit-card"></i> Payment Methods</h3>
@@ -237,7 +237,6 @@
       `);
     });
 
-    // NOTIFICATIONS
     accountItems[4].addEventListener('click', () => {
       showModal(`
         <h3><i class="fa fa-bell"></i> Notifications</h3>
@@ -258,7 +257,6 @@
       `);
     });
 
-    // SETTINGS
     accountItems[5].addEventListener('click', () => {
       showModal(`
         <h3><i class="fa fa-gear"></i> Settings</h3>
@@ -278,12 +276,10 @@
       `);
     });
 
-    // LOGOUT
     document.querySelector('.logout-btn').addEventListener('click', () => {
       window.location.href = 'login.html';
     });
 
-    // MODAL FUNCTIONS
     function showModal(content) {
       const modal = document.getElementById('accountModal');
       document.getElementById('modalContent').innerHTML = content;
