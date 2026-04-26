@@ -1,3 +1,9 @@
+<?php
+session_start();
+$currentUserId   = $_SESSION['user_id']  ?? 0;
+$currentUserName = $_SESSION['user']     ?? 'Guest';
+$currentEmail    = $_SESSION['email']    ?? 'guest@hacktheshop.com';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -72,8 +78,9 @@
           <i class="fa fa-user"></i>
         </div>
         <div class="account-info">
-          <h2>John Doe</h2>
-          <p>john.doe@email.com</p>
+          <!-- AFTER (from session) -->
+<h2><?php echo htmlspecialchars($currentUserName); ?></h2>
+<p><?php echo htmlspecialchars($currentEmail); ?></p>
           <span class="account-badge">Premium Member</span>
         </div>
       </div>
@@ -171,27 +178,80 @@
 
   <script src="js/main.js"></script>
   <script>
+    <script>
+// Current session user — injected server-side
+window.__CURRENT_USER_ID = <?php echo intval($currentUserId); ?>;
+</script>
     const accountItems = document.querySelectorAll('.account-item');
 
     accountItems[0].addEventListener('click', () => {
-      showModal(`
-        <h3><i class="fa fa-box"></i> My Orders</h3>
-        <div class="modal-list">
-          <div class="modal-item">
-            <span>#ORD-001 — Laptop Pro X</span>
-            <span class="badge-delivered">Delivered</span>
-          </div>
-          <div class="modal-item">
-            <span>#ORD-002 — AirPods Pro 2</span>
-            <span class="badge-shipping">Shipping</span>
-          </div>
-          <div class="modal-item">
-            <span>#ORD-003 — PlayStation 5</span>
-            <span class="badge-pending">Pending</span>
-          </div>
+  showModal(`
+    <h3><i class="fa fa-box"></i> My Orders</h3>
+
+    <!-- Your real orders -->
+    <div class="modal-list" id="myOrdersList">
+      <div class="modal-item">
+        <span>#ORD-001 — Laptop Pro X</span>
+        <span class="badge-delivered">Delivered</span>
+      </div>
+      <div class="modal-item">
+        <span>#ORD-002 — Smartphone Z12</span>
+        <span class="badge-shipping">Shipping</span>
+      </div>
+    </div>
+
+    <!-- IDOR DEMO SECTION -->
+    <div style="
+        margin-top:20px;
+        border-top:1px solid #3b2f6e;
+        padding-top:16px;
+    ">
+        <p style="
+            font-size:11px;
+            color:#534AB7;
+            letter-spacing:1px;
+            margin-bottom:10px;
+            font-family:'Courier New',monospace;
+        ">🔍 ORDER TRACKER — Enter any order ID</p>
+
+        <div style="display:flex;gap:8px;margin-bottom:12px;">
+            <input
+                type="number"
+                id="orderIdInput"
+                placeholder="Try 1, 2, 3..."
+                min="1"
+                style="
+                    flex:1;
+                    background:#0d0d14;
+                    border:1px solid #3b2f6e;
+                    border-radius:6px;
+                    padding:8px 12px;
+                    color:#e2d9f3;
+                    font-family:'Courier New',monospace;
+                    font-size:13px;
+                    outline:none;
+                "
+            >
+            <button onclick="fetchOrder()" style="
+                background:#7c3aed;
+                border:none;
+                color:white;
+                padding:8px 16px;
+                border-radius:6px;
+                cursor:pointer;
+                font-family:'Courier New',monospace;
+                font-size:12px;
+            ">Track</button>
         </div>
-      `);
-    });
+
+        <div id="orderResult" style="
+            font-family:'Courier New',monospace;
+            font-size:12px;
+            min-height:40px;
+        "></div>
+    </div>
+  `);
+});
 
     accountItems[1].addEventListener('click', () => {
       document.getElementById('wishPanel').classList.add('open');
@@ -289,7 +349,105 @@
     function closeModal() {
       document.getElementById('accountModal').classList.remove('open');
     }
-  </script>
+    function fetchOrder() {
+    const id     = document.getElementById('orderIdInput').value;
+    const result = document.getElementById('orderResult');
 
+    if (!id) {
+        result.innerHTML = '<span style="color:#534AB7;">Enter an order ID.</span>';
+        return;
+    }
+
+    result.innerHTML = '<span style="color:#534AB7;">Loading...</span>';
+
+    fetch('order.php?id=' + encodeURIComponent(id))
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+
+            if (data.error) {
+                result.innerHTML = `
+                    <div style="color:#e94560;padding:10px;background:#1a0a0a;
+                        border-radius:6px;border:1px solid #e9456044;">
+                        ❌ ${data.error}
+                    </div>`;
+                return;
+            }
+
+            // Build result display
+            const isOtherUser = data.user_id != getCurrentUserId();
+
+            result.innerHTML = `
+                <div style="
+                    background:#0d0d14;
+                    border:1px solid ${isOtherUser ? '#f59e0b' : '#3b2f6e'};
+                    border-radius:8px;
+                    padding:14px;
+                ">
+                    ${isOtherUser ? `
+                        <div style="
+                            color:#f59e0b;
+                            font-size:10px;
+                            letter-spacing:1px;
+                            margin-bottom:8px;
+                        ">⚠️ THIS ORDER BELONGS TO ANOTHER USER</div>
+                    ` : ''}
+
+                    <div style="display:grid;gap:6px;">
+                        <div>
+                            <span style="color:#534AB7;">Order ID &nbsp;&nbsp;</span>
+                            <span style="color:#22d3ee;">#${data.id}</span>
+                        </div>
+                        <div>
+                            <span style="color:#534AB7;">User ID &nbsp;&nbsp;&nbsp;</span>
+                            <span style="color:#${isOtherUser ? 'f59e0b' : 'e2d9f3'};">
+                                ${data.user_id}
+                                ${isOtherUser ? '← not you!' : '← you'}
+                            </span>
+                        </div>
+                        <div>
+                            <span style="color:#534AB7;">Product &nbsp;&nbsp;&nbsp;</span>
+                            <span style="color:#e2d9f3;">${data.product_id ?? 'N/A'}</span>
+                        </div>
+                        <div>
+                            <span style="color:#534AB7;">Total &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                            <span style="color:#22c55e;">${data.total ?? '0'}€</span>
+                        </div>
+                        <div>
+                            <span style="color:#534AB7;">Status &nbsp;&nbsp;&nbsp;&nbsp;</span>
+                            <span style="color:#a78bfa;">${data.status ?? 'pending'}</span>
+                        </div>
+                        <div>
+                            <span style="color:#534AB7;">Card &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                            <span style="color:#e94560;">**** ${data.card_last4 ?? '????'}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // If it's another user's order — popup fires via detector
+            // because order.php already set $_SESSION['attack'] = 'idor'
+            if (isOtherUser) {
+                setTimeout(function() {
+                    fetch('detector.php')
+                        .then(function(r) { return r.json(); })
+                        .then(function(res) {
+                            if (res.detected) showAttackPopup(res.data);
+                        });
+                }, 800);
+            }
+        })
+        .catch(function() {
+            result.innerHTML = `
+                <div style="color:#e94560;padding:10px;background:#1a0a0a;
+                    border-radius:6px;border:1px solid #e9456044;">
+                    ❌ Could not reach order.php — make sure it exists.
+                </div>`;
+        });
+}
+function getCurrentUserId() {
+    return window.__CURRENT_USER_ID || 0;
+}
+  </script>
+<script src="popup.js"></script>
 </body>
 </html>
