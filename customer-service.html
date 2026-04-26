@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HackTheShop - Customer Service</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <canvas id="particles"></canvas>
+
+  <div class="wrapper">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <button class="close-sidebar" onclick="toggleSidebar()">✕</button>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="login.html"><i class="fa fa-user"></i> Login</a>
+        <a href="promotions.html"><i class="fa fa-tag"></i> Promotions</a>
+        <a href="account.html"><i class="fa fa-circle-user"></i> Your Account</a>
+        <a href="#" onclick="toggleCSMenu(event)">
+          <i class="fa fa-headset"></i> Customer Service
+          <i class="fa fa-chevron-down" id="csChevron"></i>
+        </a>
+        <div class="sidebar-submenu" id="csSubmenu">
+          <a href="chatbot.php"><i class="fa fa-comment"></i> Chat with Echo</a>
+          <a href="customer-service.html"><i class="fa fa-envelope"></i> Contact Us</a>
+        </div>
+      </nav>
+    </aside>
+
+    <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+      <div class="nav-left">
+        <button class="burger" onclick="toggleSidebar()">
+          <i class="fa fa-bars"></i>
+        </button>
+        <a href="login.html" class="nav-login">Login</a>
+      </div>
+      <div class="nav-center">
+        <a href="index.html" style="text-decoration:none;">
+          <span class="logo">HackTheShop</span>
+        </a>
+      </div>
+      <div class="nav-right">
+        <button class="nav-icon" onclick="toggleSearch()"><i class="fa fa-search"></i></button>
+        <button class="nav-icon" onclick="toggleWishlist()"><i class="fa fa-heart"></i></button>
+        <button class="nav-icon" onclick="toggleCart()">
+          <i class="fa fa-shopping-cart"></i>
+          <span class="cart-count" id="cartCount">0</span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- SEARCH DROPDOWN -->
+    <div class="search-dropdown" id="searchDropdown">
+      <input type="text" id="searchInput" placeholder="Search products...">
+      <button onclick="searchProducts()"><i class="fa fa-search"></i></button>
+    </div>
+
+    <!-- CUSTOMER SERVICE SECTION -->
+    <section class="cs-section">
+
+      <div class="cs-header">
+        <h2>🎧 Customer Service</h2>
+        <p>We're here to help you 24/7</p>
+      </div>
+
+      <div class="cs-grid">
+
+        <!-- CONTACT FORM -->
+        <div class="cs-box">
+          <h3><i class="fa fa-envelope"></i> Send us a Message</h3>
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" id="csName" placeholder="John Doe">
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="csEmail" placeholder="john@email.com">
+          </div>
+          <div class="form-group">
+            <label>Subject</label>
+            <select id="csSubject">
+              <option value="">Select a subject...</option>
+              <option value="order">Order Issue</option>
+              <option value="refund">Refund Request</option>
+              <option value="shipping">Shipping Problem</option>
+              <option value="product">Product Question</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Message</label>
+            <textarea id="csMessage" rows="5" placeholder="Describe your issue..."></textarea>
+          </div>
+          <button class="login-btn" onclick="sendMessage()">
+            <i class="fa fa-paper-plane"></i> Send Message
+          </button>
+          <div id="csSuccess" class="success-msg" style="display:none; margin-top:16px;">
+            ✅ Your message has been sent! We'll get back to you within 24 hours.
+          </div>
+        </div>
+
+        <!-- CHATBOT -->
+        <div class="cs-box cs-chat">
+          <h3><i class="fa fa-comment"></i> Chat with Echo</h3>
+          <p class="cs-chat-desc">Get instant answers from our AI assistant Echo!</p>
+          <div class="cs-chat-preview">
+            <div class="cs-chat-msg bot">
+              👋 Hello! I'm Echo, your HackTheShop assistant. How can I help you today?
+            </div>
+            <div class="cs-chat-msg user">
+              Where is my order?
+            </div>
+            <div class="cs-chat-msg bot">
+              I can help you track your order! Please provide your order number.
+            </div>
+          </div>
+          <button class="login-btn" onclick="openChatbot()" style="margin-top:16px;">
+            <i class="fa fa-comment"></i> Start Chat with Echo
+          </button>
+        </div>
+
+      </div>
+
+      <!-- CONTACT INFO -->
+      <div class="cs-info-grid">
+        <div class="cs-info-item">
+          <i class="fa fa-clock"></i>
+          <div>
+            <div class="cs-info-title">Working Hours</div>
+            <div class="cs-info-desc">Mon - Fri : 9AM - 6PM</div>
+          </div>
+        </div>
+        <div class="cs-info-item">
+          <i class="fa fa-envelope"></i>
+          <div>
+            <div class="cs-info-title">Email</div>
+            <div class="cs-info-desc">support@hacktheshop.com</div>
+          </div>
+        </div>
+        <div class="cs-info-item">
+          <i class="fa fa-phone"></i>
+          <div>
+            <div class="cs-info-title">Phone</div>
+            <div class="cs-info-desc">+1 (555) 123-4567</div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- CART PANEL -->
+    <div class="panel" id="cartPanel">
+      <div class="panel-header">
+        🛒 Cart
+        <button onclick="toggleCart()">✕</button>
+      </div>
+      <div class="panel-body" id="cartItems">
+        <p class="empty-msg">Your cart is empty.</p>
+      </div>
+    </div>
+
+    <!-- WISHLIST PANEL -->
+    <div class="panel" id="wishPanel">
+      <div class="panel-header">
+        ❤️ Wishlist
+        <button onclick="toggleWishlist()">✕</button>
+      </div>
+      <div class="panel-body" id="wishItems">
+        <p class="empty-msg">Your wishlist is empty.</p>
+      </div>
+    </div>
+
+    <!-- CHATBOT BUBBLE -->
+    <div class="chatbot-bubble" onclick="toggleChatbot()">
+      <i class="fa fa-comment"></i>
+    </div>
+
+    <div class="chatbot-frame" id="chatbotFrame">
+      <iframe src="chatbot.php" frameborder="0"></iframe>
+    </div>
+
+    <footer class="footer">
+      © 2025 HackTheShop — Educational Cybersecurity Project
+    </footer>
+
+  </div>
+
+  <script src="js/main.js"></script>
+  <script>
+    function sendMessage() {
+      const name = document.getElementById('csName').value;
+      const email = document.getElementById('csEmail').value;
+      const message = document.getElementById('csMessage').value;
+
+      if (name === '' || email === '' || message === '') {
+        alert('Please fill in all fields!');
+        return;
+      }
+
+      document.getElementById('csSuccess').style.display = 'block';
+      document.getElementById('csName').value = '';
+      document.getElementById('csEmail').value = '';
+      document.getElementById('csMessage').value = '';
+    }
+
+    function openChatbot() {
+      document.getElementById('chatbotFrame').classList.add('open');
+    }
+  </script>
+
+</body>
+</html>
