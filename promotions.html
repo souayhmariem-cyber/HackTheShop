@@ -13,7 +13,6 @@
 
   <div class="wrapper">
 
-    <!-- SIDEBAR -->
     <aside class="sidebar" id="sidebar">
       <div class="sidebar-header">
         <button class="close-sidebar" onclick="toggleSidebar()">✕</button>
@@ -35,7 +34,6 @@
 
     <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
 
-    <!-- NAVBAR -->
     <nav class="navbar">
       <div class="nav-left">
         <button class="burger" onclick="toggleSidebar()">
@@ -44,9 +42,7 @@
         <a href="login.html" class="nav-login">Login</a>
       </div>
       <div class="nav-center">
-        <a href="index.html" style="text-decoration:none;">
-          <a href="index.html" style="text-decoration:none;"><span class="logo">HackTheShop</span></a>
-        </a>
+        <a href="index.html" style="text-decoration:none;"><span class="logo">HackTheShop</span></a>
       </div>
       <div class="nav-right">
         <button class="nav-icon" onclick="toggleSearch()"><i class="fa fa-search"></i></button>
@@ -58,21 +54,17 @@
       </div>
     </nav>
 
-    <!-- SEARCH DROPDOWN -->
     <div class="search-dropdown" id="searchDropdown">
       <input type="text" id="searchInput" placeholder="Search products...">
       <button onclick="searchProducts()"><i class="fa fa-search"></i></button>
     </div>
 
-    <!-- PROMO BANNER -->
     <div class="promo-banner">
       <span>🔥 FLASH SALE — Up to 50% OFF on selected items!</span>
     </div>
 
-    <!-- PROMO SECTION -->
     <section class="promo-section">
       <h2 class="section-title">🏷️ Current Promotions</h2>
-
       <div class="products-grid">
 
         <div class="product-card" data-category="pc">
@@ -174,39 +166,25 @@
       </div>
     </section>
 
-    <!-- CART PANEL -->
     <div class="panel" id="cartPanel">
-      <div class="panel-header">
-        🛒 Cart
-        <button onclick="toggleCart()">✕</button>
-      </div>
-      <div class="panel-body" id="cartItems">
-        <p class="empty-msg">Your cart is empty.</p>
-      </div>
+      <div class="panel-header">🛒 Cart<button onclick="toggleCart()">✕</button></div>
+      <div class="panel-body" id="cartItems"><p class="empty-msg">Your cart is empty.</p></div>
     </div>
 
-    <!-- WISHLIST PANEL -->
     <div class="panel" id="wishPanel">
-      <div class="panel-header">
-        ❤️ Wishlist
-        <button onclick="toggleWishlist()">✕</button>
-      </div>
-      <div class="panel-body" id="wishItems">
-        <p class="empty-msg">Your wishlist is empty.</p>
-      </div>
+      <div class="panel-header">❤️ Wishlist<button onclick="toggleWishlist()">✕</button></div>
+      <div class="panel-body" id="wishItems"><p class="empty-msg">Your wishlist is empty.</p></div>
     </div>
 
-    <!-- CHATBOT BUBBLE -->
     <div class="chatbot-bubble" onclick="toggleChatbot()">
       <i class="fa fa-comment"></i>
     </div>
-
     <div class="chatbot-frame" id="chatbotFrame">
       <iframe src="chatbot.php" frameborder="0"></iframe>
     </div>
 
     <footer class="footer">
-      © 2025 HackTheShop — Educational Cybersecurity Project
+      © 2025 HackTheShop — Your one-stop shop for the latest tech & electronics
     </footer>
 
   </div>

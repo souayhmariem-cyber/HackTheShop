@@ -91,7 +91,7 @@ foreach ($products as $product) {
       <?php if ($search != ''): ?>
         <div class="search-result">
           <!-- VOLONTAIREMENT VULNÉRABLE XSS -->
-          <p class="search-info">Results for : <strong style="color:#a78bfa;"><?php echo $search; ?></strong></p>
+          <p class="search-info">Results for : <strong style="color:#a78bfa;"><?php echo htmlspecialchars($search, ENT_QUOTES, 'UTF-8'); ?></strong></p>
 
           <?php if (count($results) > 0): ?>
             <div class="products-grid">
@@ -111,14 +111,14 @@ foreach ($products as $product) {
               <?php endforeach; ?>
             </div>
           <?php else: ?>
-            <p class="no-result">No products found for "<?php echo $search; ?>"</p>
+            <p class="no-result">No products found for "<?php echo htmlspecialchars($search, ENT_QUOTES, 'UTF-8'); ?>"</p>
           <?php endif; ?>
         </div>
       <?php endif; ?>
     </section>
 
     <footer class="footer">
-      © 2025 HackTheShop — Educational Cybersecurity Project
+      © 2025 HackTheShop — Your one-stop shop for the latest tech & electronics
     </footer>
 
   </div>

@@ -7,13 +7,23 @@ function addComment() {
     return;
   }
 
+  // SÉCURISÉ — textContent au lieu de innerHTML
   const commentsList = document.getElementById('commentsList');
-  commentsList.innerHTML += `
-    <div class="comment-card">
-      <div class="comment-author">${author}</div>
-      <div class="comment-text">${text}</div>
-    </div>
-  `;
+  
+  const div = document.createElement('div');
+  div.className = 'comment-card';
+  
+  const authorDiv = document.createElement('div');
+  authorDiv.className = 'comment-author';
+  authorDiv.textContent = author; // ← sécurisé
+  
+  const textDiv = document.createElement('div');
+  textDiv.className = 'comment-text';
+  textDiv.textContent = text; // ← sécurisé
+  
+  div.appendChild(authorDiv);
+  div.appendChild(textDiv);
+  commentsList.appendChild(div);
 
   document.getElementById('commentAuthor').value = '';
   document.getElementById('commentText').value = '';
