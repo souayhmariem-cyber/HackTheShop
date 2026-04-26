@@ -2,7 +2,7 @@
 session_start();
 require '../db-connection.php';
 
-// ── Fetch completed attacks for this session ──
+
 $sessionId = session_id();
 $completed = [];
 
@@ -16,10 +16,10 @@ try {
         $completed[$row['attack_name']] = $row['completed_at'];
     }
 } catch (PDOException $e) {
-    // DB not ready yet — show empty progress
+    
 }
 
-// ── All challenges definition ──
+
 $challenges = [
     [
         'key'      => 'sqli',
@@ -121,14 +121,14 @@ $barFilled = round($percent / 5); // out of 20 chars
       color: #e2d9f3;
     }
 
-    /* ── TERMINAL CONTAINER ── */
+    
     .lab-wrap {
       max-width: 860px;
       margin: 0 auto;
       padding: 32px 20px 60px;
     }
 
-    /* ── TERMINAL HEADER ── */
+    
     .terminal-header {
       background: #0d0d14;
       border: 1px solid #7c3aed;
@@ -153,7 +153,7 @@ $barFilled = round($percent / 5); // out of 20 chars
       margin-left: 8px;
     }
 
-    /* ── TERMINAL BODY ── */
+   
     .terminal-body {
       background: #080810;
       border: 1px solid #7c3aed;
@@ -161,7 +161,7 @@ $barFilled = round($percent / 5); // out of 20 chars
       padding: 28px 28px 32px;
     }
 
-    /* ── PROGRESS BAR ── */
+   
     .progress-section {
       margin-bottom: 32px;
       padding-bottom: 24px;
@@ -202,7 +202,7 @@ $barFilled = round($percent / 5); // out of 20 chars
       white-space: nowrap;
     }
 
-    /* ── CHALLENGE ROWS ── */
+    
     .challenge-list {
       display: flex;
       flex-direction: column;
