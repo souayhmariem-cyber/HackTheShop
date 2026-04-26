@@ -1,17 +1,13 @@
 <?php
-// ============================================================
-//  comment.php — Stored XSS Vulnerable Endpoint
-//  Handles both GET (fetch comments) and POST (save comment)
-//  Educational demo: input saved raw, output rendered raw
-// ============================================================
+
 session_start();
 header('Content-Type: application/json');
 
-require 'db-connection.php';
+require 'db_connection.php';
 
 $action = $_GET['action'] ?? $_POST['action'] ?? '';
 
-// ── GET: fetch comments for a product ──────────────────────
+
 if ($action === 'get') {
     $productId = $_GET['product_id'] ?? 1;
 
@@ -31,14 +27,7 @@ if ($action === 'get') {
         $stmt->execute([intval($productId)]);
         $comments = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        // ─────────────────────────────────────────────────────
-        // INTENTIONALLY VULNERABLE — contenu is returned RAW
-        // The frontend renders it with innerHTML (no escaping)
-        //
-        // Secure version would use:
-        //   $c['contenu'] = htmlspecialchars($c['contenu'], ENT_QUOTES, 'UTF-8');
-        // ─────────────────────────────────────────────────────
-        echo json_encode($comments);
+        
 
     } catch (PDOException $e) {
         echo json_encode(['error' => 'DB error: ' . $e->getMessage()]);

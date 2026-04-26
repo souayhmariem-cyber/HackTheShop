@@ -1,6 +1,6 @@
 <?php
 session_start();
-require 'db-connection.php';
+require 'db_connection.php';
 
 // ─────────────────────────────────────────────
 // INTENTIONALLY WEAK AUTH — Educational demo

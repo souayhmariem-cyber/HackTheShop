@@ -1,6 +1,6 @@
 <?php
 session_start();
-require 'db_connect.php';
+require 'db_connection.php';
 
 $error        = null;
 $loginSuccess = false;

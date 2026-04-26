@@ -1,6 +1,6 @@
 <?php
 session_start();
-require '../db-connection.php';
+require '../db_connection.php';
 
 
 $sessionId = session_id();
@@ -103,7 +103,7 @@ $challenges = [
 $total     = count($challenges);
 $done      = count($completed);
 $percent   = $total > 0 ? round(($done / $total) * 100) : 0;
-$barFilled = round($percent / 5); // out of 20 chars
+$barFilled = round($percent / 5); 
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -317,7 +317,7 @@ $barFilled = round($percent / 5); // out of 20 chars
       color: #7c3aed;
     }
 
-    /* ── HINT DRAWER ── */
+    
     .hint-drawer {
       display: none;
       margin-top: 10px;
