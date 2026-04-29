@@ -1,3 +1,8 @@
+<?php
+session_start();
+$nom = isset($_SESSION['user']) ? $_SESSION['user'] : 'Guest';
+$email = isset($_SESSION['email']) ? $_SESSION['email'] : '';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,7 +26,7 @@
       <nav class="sidebar-nav">
         <a href="login.html"><i class="fa fa-user"></i> Login</a>
         <a href="promotions.html"><i class="fa fa-tag"></i> Promotions</a>
-        <a href="account.html"><i class="fa fa-circle-user"></i> Your Account</a>
+        <a href="account.php"><i class="fa fa-circle-user"></i> Your Account</a>
         <a href="javascript:void(0)" onclick="toggleCSMenu(event)">
           <i class="fa fa-headset"></i> Customer Service
           <i class="fa fa-chevron-down" id="csChevron"></i>
@@ -70,8 +75,8 @@
           <i class="fa fa-user"></i>
         </div>
         <div class="account-info">
-          <h2>John Doe</h2>
-          <p>john.doe@email.com</p>
+          <h2><?php echo htmlspecialchars($nom); ?></h2>
+          <p><?php echo htmlspecialchars($email); ?></p>
           <span class="account-badge">Premium Member</span>
         </div>
       </div>
@@ -116,7 +121,7 @@
 
       </div>
 
-      <button class="logout-btn">
+      <button class="logout-btn" onclick="window.location.href='php/logout.php'">
         <i class="fa fa-right-from-bracket"></i> Log Out
       </button>
 
@@ -146,7 +151,7 @@
 
     <!-- CHATBOT BUBBLE -->
     <div class="chatbot-bubble" onclick="toggleChatbot()">
-      <i class="fa fa-comment"></i>
+      <img src="images/echo.png" alt="Echo" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">
     </div>
 
     <div class="chatbot-frame" id="chatbotFrame">
@@ -260,11 +265,11 @@
         <h3><i class="fa fa-gear"></i> Settings</h3>
         <div class="form-group">
           <label>Full Name</label>
-          <input type="text" placeholder="John Doe">
+          <input type="text" placeholder="<?php echo htmlspecialchars($nom); ?>">
         </div>
         <div class="form-group">
           <label>Email</label>
-          <input type="email" placeholder="john@email.com">
+          <input type="email" placeholder="<?php echo htmlspecialchars($email); ?>">
         </div>
         <div class="form-group">
           <label>New Password</label>
@@ -272,10 +277,6 @@
         </div>
         <button class="login-btn" onclick="closeModal()">Save Changes</button>
       `);
-    });
-
-    document.querySelector('.logout-btn').addEventListener('click', () => {
-      window.location.href = 'login.html';
     });
 
     function showModal(content) {

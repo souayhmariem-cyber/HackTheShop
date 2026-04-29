@@ -404,19 +404,18 @@ body {
   position: fixed;
   bottom: 28px;
   right: 28px;
-  width: 56px;
-  height: 56px;
-  background: #7c3aed;
+  width: 70px;
+  height: 70px;
+  background: transparent;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   z-index: 300;
-  font-size: 22px;
-  color: white;
   box-shadow: 0 0 20px rgba(124, 58, 237, 0.5);
   transition: transform 0.2s;
+  overflow: hidden;
 }
 
 .chatbot-bubble:hover {
@@ -1189,4 +1188,90 @@ select:focus {
 .sidebar-submenu a:hover {
   color: #a78bfa !important;
   background: #1e0a3c !important;
+}
+
+.comment-date {
+  font-size: 11px;
+  color: #534AB7;
+  margin-top: 4px;
+}
+/* ── PRODUCT MODAL ── */
+.product-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 400;
+  align-items: center;
+  justify-content: center;
+  overflow-y: auto;
+}
+
+.product-modal.open {
+  display: flex;
+}
+
+.product-modal-box {
+  background: #0d0d14;
+  border: 1px solid #7c3aed;
+  border-radius: 16px;
+  padding: 28px;
+  width: 90%;
+  max-width: 700px;
+  position: relative;
+  box-shadow: 0 0 40px rgba(124, 58, 237, 0.3);
+  margin: 20px auto;
+}
+
+.product-modal-content {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.product-modal-img {
+  width: 250px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 1px solid #3b2f6e;
+}
+
+.product-modal-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.product-modal-info h2 {
+  color: #a78bfa;
+  font-size: 20px;
+}
+
+.product-modal-price {
+  color: #7c3aed;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.product-modal-desc {
+  color: #8b8ba0;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.product-modal-comments {
+  border-top: 1px solid #3b2f6e;
+  padding-top: 20px;
+}
+
+.product-modal-comments h3 {
+  color: #a78bfa;
+  font-size: 15px;
+  margin-bottom: 16px;
+  letter-spacing: 1px;
 }

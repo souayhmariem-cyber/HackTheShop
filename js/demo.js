@@ -1,33 +1,61 @@
+// Charger les commentaires depuis la DB
+function loadComments() {
+  fetch('../php/comments.php?action=get')
+    .then(r => r.json())
+    .then(comments => {
+      const list = document.getElementById('commentsList');
+      list.innerHTML = '';
+      comments.forEach(c => {
+        const div = document.createElement('div');
+        div.className = 'comment-card';
+
+        const author = document.createElement('div');
+        author.className = 'comment-author';
+        author.textContent = c.author;
+
+        const text = document.createElement('div');
+        text.className = 'comment-text';
+        text.textContent = c.text;
+
+        const date = document.createElement('div');
+        date.className = 'comment-date';
+        date.textContent = new Date(c.created_at).toLocaleDateString();
+
+        div.appendChild(author);
+        div.appendChild(text);
+        div.appendChild(date);
+        list.appendChild(div);
+      });
+    });
+}
+
+// Ajouter un commentaire
 function addComment() {
-  const author = document.getElementById('commentAuthor').value;
-  const text = document.getElementById('commentText').value;
+  const author = document.getElementById('commentAuthor').value.trim();
+  const text = document.getElementById('commentText').value.trim();
 
   if (author === '' || text === '') {
     alert('Please fill in all fields!');
     return;
   }
 
-  // SÉCURISÉ — textContent au lieu de innerHTML
-  const commentsList = document.getElementById('commentsList');
-  
-  const div = document.createElement('div');
-  div.className = 'comment-card';
-  
-  const authorDiv = document.createElement('div');
-  authorDiv.className = 'comment-author';
-  authorDiv.textContent = author; // ← sécurisé
-  
-  const textDiv = document.createElement('div');
-  textDiv.className = 'comment-text';
-  textDiv.textContent = text; // ← sécurisé
-  
-  div.appendChild(authorDiv);
-  div.appendChild(textDiv);
-  commentsList.appendChild(div);
-
-  document.getElementById('commentAuthor').value = '';
-  document.getElementById('commentText').value = '';
+  fetch('../php/comments.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: `author=${encodeURIComponent(author)}&text=${encodeURIComponent(text)}`
+  })
+  .then(r => r.json())
+  .then(data => {
+    if (data.success) {
+      document.getElementById('commentAuthor').value = '';
+      document.getElementById('commentText').value = '';
+      loadComments();
+    }
+  });
 }
+
+// Charger au démarrage
+window.addEventListener('load', loadComments);
 
 function doSearch() {
   const query = document.getElementById('searchInput2').value;

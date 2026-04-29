@@ -1,71 +1,34 @@
 <?php
-session_start([
-  'cookie_lifetime' => 1800,
-  'cookie_secure'   => false,
-  'cookie_httponly' => true,
-  'cookie_samesite' => 'Strict'
-]);
+session_start();
 require 'db_connect.php';
 
 $error = '';
 $success = '';
 
-// Initialiser le compteur de tentatives
-if (!isset($_SESSION['login_attempts'])) {
-  $_SESSION['login_attempts'] = 0;
-  $_SESSION['last_attempt_time'] = time();
-}
-
-// Réinitialiser après 15 minutes
-if (time() - $_SESSION['last_attempt_time'] > 900) {
-  $_SESSION['login_attempts'] = 0;
-  $_SESSION['last_attempt_time'] = time();
-}
-
-// Bloquer après 5 tentatives
-$max_attempts = 5;
-$blocked = $_SESSION['login_attempts'] >= $max_attempts;
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-  
-  if ($blocked) {
-    $remaining = 900 - (time() - $_SESSION['last_attempt_time']);
-    $minutes = ceil($remaining / 60);
-    $error = "Too many failed attempts. Please wait $minutes minute(s).";
-  } else {
-    $email = $_POST['email'];
-    $password = $_POST['password'];
+  $nom = $_POST['nom'];
+  $email = $_POST['email'];
+  $password = $_POST['password'];
+  $confirm = $_POST['confirm'];
 
+  if ($password !== $confirm) {
+    $error = "Passwords do not match!";
+  } else {
+    // Vérifier si l'email existe déjà
     $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ?");
     $stmt->execute([$email]);
-    $user = $stmt->fetch();
+    $existing = $stmt->fetch();
 
-    if ($user && password_verify($password, $user['password'])) {
-      session_regenerate_id(true);
-      $_SESSION['user'] = $user['nom'];
-      $_SESSION['email'] = $user['email'];
-      $_SESSION['last_activity'] = time();
-      $_SESSION['login_attempts'] = 0;
-      $success = "✅ Welcome back, " . $user['nom'] . "!";
+    if ($existing) {
+      $error = "Email already exists!";
     } else {
-      $_SESSION['login_attempts']++;
-      $_SESSION['last_attempt_time'] = time();
-      $remaining_attempts = $max_attempts - $_SESSION['login_attempts'];
-      if ($remaining_attempts > 0) {
-        $error = "Invalid email or password! $remaining_attempts attempt(s) remaining.";
-      } else {
-        $error = "Too many failed attempts. Please wait 15 minutes.";
-      }
+      // Hash du mot de passe
+      $hashed = password_hash($password, PASSWORD_DEFAULT);
+      $stmt = $pdo->prepare("INSERT INTO users (email, password, nom) VALUES (?, ?, ?)");
+      $stmt->execute([$email, $hashed, $nom]);
+      $success = "✅ Account created! You can now login.";
     }
   }
-}
-
-// Expiration session après 30 minutes
-if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > 1800)) {
-  session_unset();
-  session_destroy();
-  header('Location: login_secure.php');
-  exit;
 }
 ?>
 
@@ -74,7 +37,7 @@ if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HackTheShop - Secure Login</title>
+  <title>HackTheShop - Sign Up</title>
   <link rel="stylesheet" href="../style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -126,8 +89,8 @@ if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > 
 
     <section class="login-section">
       <div class="login-box">
-        <h2>Secure Login</h2>
-        <p class="login-subtitle">Protected with password hashing & prepared statements</p>
+        <h2>Create Account</h2>
+        <p class="login-subtitle">Join HackTheShop today</p>
 
         <?php if ($error): ?>
           <div class="error-msg">❌ <?php echo $error; ?></div>
@@ -135,25 +98,34 @@ if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > 
 
         <?php if ($success): ?>
           <div class="success-msg"><?php echo $success; ?></div>
-          <a href="../index.html" class="login-btn" style="display:block; text-align:center; text-decoration:none; margin-top:16px;">
-            Go to Shop
+          <a href="login_secure.php" class="login-btn" style="display:block; text-align:center; text-decoration:none; margin-top:16px;">
+            Go to Login
           </a>
         <?php else: ?>
-          <form action="login_secure.php" method="POST">
+          <form action="register.php" method="POST">
+            <div class="form-group">
+              <label>Full Name</label>
+              <input type="text" name="nom" placeholder="John Doe" required>
+            </div>
             <div class="form-group">
               <label>Email</label>
-              <input type="text" name="email" placeholder="your@email.com">
+              <input type="email" name="email" placeholder="your@email.com" required>
             </div>
             <div class="form-group">
               <label>Password</label>
-              <input type="password" name="password" placeholder="••••••••">
+              <input type="password" name="password" placeholder="••••••••" required>
             </div>
-            <button type="submit" class="login-btn">Sign In Securely</button>
+            <div class="form-group">
+              <label>Confirm Password</label>
+              <input type="password" name="confirm" placeholder="••••••••" required>
+            </div>
+            <button type="submit" class="login-btn">Create Account</button>
           </form>
         <?php endif; ?>
 
-        
-
+        <p class="login-hint">
+          Already have an account? <a href="login_secure.php">Sign In</a>
+        </p>
       </div>
     </section>
 
