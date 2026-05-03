@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HackTheShop - Search</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="images/png" href="images/favicon.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <canvas id="particles"></canvas>
+
+  <div class="wrapper">
+
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <button class="close-sidebar" onclick="toggleSidebar()">✕</button>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="login.html"><i class="fa fa-user"></i> Login</a>
+        <a href="promotions.html"><i class="fa fa-tag"></i> Promotions</a>
+        <a href="account.php"><i class="fa fa-circle-user"></i> Your Account</a>
+        <a href="javascript:void(0)" onclick="toggleCSMenu(event)">
+          <i class="fa fa-headset"></i> Customer Service
+          <i class="fa fa-chevron-down" id="csChevron"></i>
+        </a>
+        <div class="sidebar-submenu" id="csSubmenu">
+          <a href="chatbot.php"><i class="fa fa-comment"></i> Chat with Echo</a>
+          <a href="customer-service.html"><i class="fa fa-envelope"></i> Contact Us</a>
+        </div>
+      </nav>
+    </aside>
+
+    <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+    <nav class="navbar">
+      <div class="nav-left">
+        <button class="burger" onclick="toggleSidebar()">
+          <i class="fa fa-bars"></i>
+        </button>
+        <a href="login.html" class="nav-login">Login</a>
+      </div>
+      <div class="nav-center">
+        <a href="index.html" style="text-decoration:none;"><span class="logo">HackTheShop</span></a>
+      </div>
+      <div class="nav-right">
+        <button class="nav-icon" onclick="toggleSearch()"><i class="fa fa-search"></i></button>
+        <button class="nav-icon" onclick="toggleWishlist()"><i class="fa fa-heart"></i></button>
+        <button class="nav-icon" onclick="toggleCart()">
+          <i class="fa fa-shopping-cart"></i>
+          <span class="cart-count" id="cartCount">0</span>
+        </button>
+      </div>
+    </nav>
+
+    <div class="search-dropdown" id="searchDropdown">
+      <input type="text" id="searchInput" placeholder="Search products...">
+      <button onclick="searchProducts()"><i class="fa fa-search"></i></button>
+    </div>
+
+    <section class="search-section">
+      <h2>Search Products</h2>
+      <p class="search-subtitle">Find what you're looking for</p>
+      <div class="search-bar">
+        <input type="text" id="searchInput2" placeholder="Ex: laptop, airpods...">
+        <button onclick="doSearch()">
+          <i class="fa fa-search"></i> Search
+        </button>
+      </div>
+      <div class="search-result" id="searchResult"></div>
+    </section>
+
+    <div class="panel" id="cartPanel">
+      <div class="panel-header">🛒 Cart<button onclick="toggleCart()">✕</button></div>
+      <div class="panel-body" id="cartItems"><p class="empty-msg">Your cart is empty.</p></div>
+    </div>
+
+    <div class="panel" id="wishPanel">
+      <div class="panel-header">❤️ Wishlist<button onclick="toggleWishlist()">✕</button></div>
+      <div class="panel-body" id="wishItems"><p class="empty-msg">Your wishlist is empty.</p></div>
+    </div>
+
+    <div class="chatbot-bubble" onclick="toggleChatbot()">
+      <img src="images/echo.png" alt="Echo" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">
+    </div>
+    <div class="chatbot-frame" id="chatbotFrame">
+      <iframe src="chatbot.php" frameborder="0"></iframe>
+    </div>
+
+    <footer class="footer">
+      © 2025 HackTheShop — Your one-stop shop for the latest tech & electronics
+    </footer>
+
+  </div>
+
+  <script src="js/main.js"></script>
+  <script src="js/demo.js"></script>
+</body>
+</html>

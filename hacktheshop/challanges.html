@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HackTheShop - Challenges</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="images/png" href="images/favicon.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <canvas id="particles"></canvas>
+
+  <div class="wrapper">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <button class="close-sidebar" onclick="toggleSidebar()">✕</button>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="login.html"><i class="fa fa-user"></i> Login</a>
+        <a href="promotions.html"><i class="fa fa-tag"></i> Promotions</a>
+        <a href="challenges.html" style="color:#a78bfa;"><i class="fa fa-trophy"></i> Challenges</a>
+        <a href="account.php"><i class="fa fa-circle-user"></i> Your Account</a>
+        <a href="javascript:void(0)" onclick="toggleCSMenu(event)">
+          <i class="fa fa-headset"></i> Customer Service
+          <i class="fa fa-chevron-down" id="csChevron"></i>
+        </a>
+        <div class="sidebar-submenu" id="csSubmenu">
+          <a href="chatbot.php"><i class="fa fa-comment"></i> Chat with Echo</a>
+          <a href="customer-service.html"><i class="fa fa-envelope"></i> Contact Us</a>
+        </div>
+      </nav>
+    </aside>
+
+    <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+      <div class="nav-left">
+        <button class="burger" onclick="toggleSidebar()">
+          <i class="fa fa-bars"></i>
+        </button>
+        <a href="login.html" class="nav-login" id="navLoginBtn">Login</a>
+      </div>
+      <div class="nav-center">
+        <a href="index.html" style="text-decoration:none;"><span class="logo">HackTheShop</span></a>
+      </div>
+      <div class="nav-right">
+        <button class="nav-icon" onclick="toggleSearch()"><i class="fa fa-search"></i></button>
+        <button class="nav-icon" onclick="toggleWishlist()"><i class="fa fa-heart"></i></button>
+        <button class="nav-icon" onclick="toggleCart()">
+          <i class="fa fa-shopping-cart"></i>
+          <span class="cart-count" id="cartCount">0</span>
+        </button>
+      </div>
+    </nav>
+
+    <div class="search-dropdown" id="searchDropdown">
+      <input type="text" id="searchInput" placeholder="Search products...">
+      <button onclick="searchProducts()"><i class="fa fa-search"></i></button>
+    </div>
+
+    <!-- CHALLENGES HEADER -->
+    <section class="challenges-section">
+      <h2 class="section-title">🏆 Cybersecurity Challenges</h2>
+      <p class="challenges-subtitle">Complete challenges to unlock exclusive products & earn badges</p>
+
+      <!-- PROGRESS BAR -->
+      <div id="progressBar" style="
+        max-width:600px;margin:0 auto 32px;
+        background:rgba(13,13,20,0.8);border:1px solid #2d2d40;
+        border-radius:12px;padding:16px 20px;
+      ">
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+          <span style="color:#a78bfa;font-size:0.85rem;">Your Progress</span>
+          <span id="progressText" style="color:#22d3ee;font-size:0.85rem;">0 / 8 completed</span>
+        </div>
+        <div style="background:#1e1a2e;border-radius:20px;height:10px;overflow:hidden;">
+          <div id="progressFill" style="
+            height:100%;background:linear-gradient(90deg,#7c3aed,#22d3ee);
+            border-radius:20px;width:0%;transition:width 1s ease;
+          "></div>
+        </div>
+      </div>
+
+      <!-- CHALLENGES GRID (loaded dynamically) -->
+      <div class="challenges-grid" id="challengesGrid">
+        <div style="text-align:center;color:#534AB7;padding:40px;grid-column:1/-1;">
+          <i class="fa fa-spinner fa-spin" style="font-size:2rem;"></i>
+          <p style="margin-top:12px;">Loading challenges...</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- USER REWARDS -->
+    <section class="rewards-section">
+      <h2 class="section-title">🎁 Your Rewards</h2>
+      <div class="rewards-grid" id="rewardsContainer">
+        <p style="color:#534AB7;text-align:center;padding:20px;grid-column:1/-1;">Login to see your rewards</p>
+      </div>
+    </section>
+
+    <!-- BADGES -->
+    <section style="padding:0 20px 40px;max-width:1200px;margin:0 auto;">
+      <h3 style="color:#a78bfa;font-size:1.1rem;letter-spacing:2px;margin-bottom:12px;">🏅 Badges Earned</h3>
+      <div class="badges-grid" id="badgesGrid">
+        <span style="color:#534AB7;font-size:0.85rem;">Complete challenges to earn badges!</span>
+      </div>
+    </section>
+
+    <!-- PANELS -->
+    <div class="panel" id="cartPanel">
+      <div class="panel-header">🛒 Cart<button onclick="toggleCart()">✕</button></div>
+      <div class="panel-body" id="cartItems"><p class="empty-msg">Your cart is empty.</p></div>
+    </div>
+    <div class="panel" id="wishPanel">
+      <div class="panel-header">❤️ Wishlist<button onclick="toggleWishlist()">✕</button></div>
+      <div class="panel-body" id="wishItems"><p class="empty-msg">Your wishlist is empty.</p></div>
+    </div>
+
+    <!-- CHATBOT -->
+    <div class="chatbot-bubble" onclick="toggleChatbot()">
+      <img src="images/echo.png" alt="Echo" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">
+    </div>
+    <div class="chatbot-frame" id="chatbotFrame">
+      <iframe src="chatbot.php" frameborder="0"></iframe>
+    </div>
+
+    <footer class="footer">
+      © 2025 HackTheShop — Your one-stop shop for the latest tech & electronics
+    </footer>
+  </div>
+
+  <script src="js/main.js"></script>
+  <script src="js/reward.js"></script>
+  <script>
+    const categoryIcons = {
+      'pc': 'fa-laptop', 'phone': 'fa-mobile', 'audio': 'fa-headphones',
+      'wearable': 'fa-clock', 'camera': 'fa-camera', 'gaming': 'fa-gamepad',
+      'accessory': 'fa-plug', 'screen': 'fa-tv'
+    };
+
+    async function loadChallenges() {
+      try {
+        const res  = await fetch('php/reward.php?action=get_categories');
+        const cats = await res.json();
+        const grid = document.getElementById('challengesGrid');
+
+        if (!cats || cats.length === 0) {
+          grid.innerHTML = '<p style="text-align:center;color:#534AB7;padding:40px;grid-column:1/-1;">No challenges available yet. Make sure the database is set up!</p>';
+          return;
+        }
+
+        grid.innerHTML = cats.map(cat => `
+          <div class="challenge-card ${cat.unlocked ? 'completed' : ''}">
+            <div class="challenge-icon">
+              <i class="fa ${categoryIcons[cat.slug] || 'fa-star'}"></i>
+            </div>
+            <div class="challenge-title">${cat.challenge_title || cat.name + ' Challenge'}</div>
+            <div class="challenge-cat">${cat.name} Category</div>
+            <div class="challenge-desc">${cat.challenge_description || 'Complete this challenge to unlock products.'}</div>
+            <div class="challenge-meta">
+              <span class="challenge-badge">🎁 ${cat.product_count} Products</span>
+              ${cat.unlocked ? '<span class="challenge-badge" style="border-color:#22d3ee;color:#22d3ee;background:rgba(34,211,238,0.1);">✓ Completed</span>' : ''}
+            </div>
+            <button
+              class="unlock-btn ${cat.unlocked ? 'unlocked' : ''}"
+              data-category-id="${cat.id}"
+              ${cat.unlocked ? 'disabled' : ''}
+              onclick="${cat.unlocked ? '' : `startChallenge(${cat.id}, '${cat.challenge_url}', '${cat.name}')`}"
+            >
+              ${cat.unlocked
+                ? '<i class="fa fa-check"></i> Unlocked!'
+                : '<i class="fa fa-external-link"></i> Start Challenge'}
+            </button>
+          </div>
+        `).join('');
+
+        // Update progress bar
+        const done  = cats.filter(c => c.unlocked).length;
+        const total = cats.length;
+        document.getElementById('progressText').textContent = `${done} / ${total} completed`;
+        document.getElementById('progressFill').style.width = `${(done/total)*100}%`;
+
+      } catch (e) {
+        document.getElementById('challengesGrid').innerHTML = `
+          <div style="grid-column:1/-1;text-align:center;padding:40px;color:#534AB7;">
+            <i class="fa fa-database" style="font-size:2rem;margin-bottom:12px;"></i>
+            <p>Database not connected. Please run <code>hacktheshop.sql</code> first.</p>
+          </div>
+        `;
+      }
+    }
+
+    async function loadBadges() {
+      try {
+        const res    = await fetch('php/reward.php?action=get_badges');
+        const badges = await res.json();
+        const grid   = document.getElementById('badgesGrid');
+        if (badges.length === 0) return;
+        grid.innerHTML = badges.map(b => `
+          <div class="badge-item">
+            <i class="fa ${b.badge_icon || 'fa-trophy'}"></i>
+            ${b.badge_name}
+          </div>
+        `).join('');
+      } catch(e) {}
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      loadChallenges();
+      loadBadges();
+    });
+  </script>
+</body>
+</html>

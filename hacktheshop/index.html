@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HackTheShop</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/png" href="images/favicon.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .categories-section {
+      padding: 40px 20px 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .categories-section .section-title {
+      color: #a78bfa;
+      font-size: 1.4rem;
+      letter-spacing: 2px;
+      margin-bottom: 6px;
+    }
+    .categories-section .section-sub {
+      color: #534AB7;
+      font-size: 0.85rem;
+      margin-bottom: 28px;
+    }
+    .categories-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 18px;
+    }
+    .cat-card {
+      background: rgba(13,13,20,0.9);
+      border: 1px solid #2d2d40;
+      border-radius: 16px;
+      padding: 24px 20px;
+      text-decoration: none;
+      display: block;
+      transition: border-color 0.25s, box-shadow 0.25s, transform 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .cat-card::before {
+      content:'';
+      position:absolute;inset:0;
+      background:linear-gradient(135deg,rgba(124,58,237,0.07),transparent);
+      opacity:0;transition:opacity 0.3s;
+    }
+    .cat-card:hover { border-color: #7c3aed; box-shadow: 0 0 30px rgba(124,58,237,0.2); transform: translateY(-4px); }
+    .cat-card:hover::before { opacity: 1; }
+    .cat-card.unlocked-cat { border-color: rgba(34,211,238,0.4); }
+    .cat-card-icon { font-size: 2.2rem; color: #7c3aed; margin-bottom: 14px; display: block; }
+    .cat-card-name { color: #e2d9f3; font-size: 1.05rem; font-weight: bold; letter-spacing: 0.5px; margin-bottom: 6px; }
+    .cat-card-desc { color: #534AB7; font-size: 0.8rem; line-height: 1.5; margin-bottom: 16px; }
+    .cat-card-footer { display: flex; align-items: center; justify-content: space-between; }
+    .cat-card-count { font-size: 0.75rem; color: #534AB7; }
+    .cat-lock-badge { font-size: 0.72rem; padding: 3px 10px; border-radius: 20px; font-family: 'Courier New', monospace; }
+    .cat-lock-badge.locked   { border: 1px solid #534AB7; color: #534AB7; }
+    .cat-lock-badge.unlocked { border: 1px solid #22d3ee; color: #22d3ee; background: rgba(34,211,238,0.08); }
+
+    .featured-section { padding: 20px 20px 60px; max-width: 1200px; margin: 0 auto; }
+    .featured-section .section-title { color: #a78bfa; font-size: 1.2rem; letter-spacing: 2px; margin-bottom: 6px; }
+    .featured-section .section-sub  { color: #534AB7; font-size: 0.82rem; margin-bottom: 22px; }
+
+    .hero-banner {
+      margin: 20px 20px 0;
+      background: linear-gradient(135deg, rgba(124,58,237,0.15), rgba(34,211,238,0.07));
+      border: 1px solid rgba(124,58,237,0.45);
+      border-radius: 18px;
+      padding: 28px 30px;
+      display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap;
+    }
+    .hero-banner h2 { color: #a78bfa; font-size: 1.25rem; margin-bottom: 6px; }
+    .hero-banner p  { color: #534AB7; font-size: 0.85rem; max-width: 500px; }
+    .hero-banner-btn {
+      padding: 13px 28px; background: #7c3aed; border: none; color: white;
+      border-radius: 25px; cursor: pointer; font-family: 'Courier New', monospace;
+      font-weight: bold; font-size: 0.88rem; white-space: nowrap;
+      transition: background 0.2s, box-shadow 0.2s; text-decoration: none; display: inline-block;
+    }
+    .hero-banner-btn:hover { background: #6d28d9; box-shadow: 0 0 25px rgba(124,58,237,0.45); }
+  </style>
+</head>
+<body>
+  <canvas id="particles"></canvas>
+
+  <div class="product-modal" id="productModal">
+    <div class="product-modal-box">
+      <button class="modal-close" onclick="closeProductModal()">✕</button>
+      <div class="product-modal-content">
+        <img id="modalImg" src="" alt="" class="product-modal-img">
+        <div class="product-modal-info">
+          <h2 id="modalName"></h2>
+          <div id="modalPrice" class="product-modal-price"></div>
+          <p id="modalDesc" class="product-modal-desc"></p>
+          <button class="btn-cart" id="modalAddCart"><i class="fa fa-cart-plus"></i> Add to Cart</button>
+        </div>
+      </div>
+      <div class="product-modal-comments">
+        <h3>Customer Reviews</h3>
+        <div class="comments-list" id="modalCommentsList"></div>
+        <div class="comment-form">
+          <h3>Leave a Review</h3>
+          <div class="form-group"><label>Your Name</label><input type="text" id="modalAuthor" placeholder="Your name"></div>
+          <div class="form-group"><label>Your Review</label><textarea id="modalText" rows="3" placeholder="Write your review..."></textarea></div>
+          <button class="login-btn" onclick="submitModalComment()">Post Review</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrapper">
+
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <button class="close-sidebar" onclick="toggleSidebar()">✕</button>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="login.html"><i class="fa fa-user"></i> Login</a>
+        <a href="promotions.html"><i class="fa fa-tag"></i> Promotions</a>
+        <a href="account.php"><i class="fa fa-circle-user"></i> Your Account</a>
+        <a href="javascript:void(0)" onclick="toggleCSMenu(event)">
+          <i class="fa fa-headset"></i> Customer Service
+          <i class="fa fa-chevron-down" id="csChevron"></i>
+        </a>
+        <div class="sidebar-submenu" id="csSubmenu">
+          <a href="chatbot.php"><i class="fa fa-comment"></i> Chat with Echo</a>
+          <a href="customer-service.html"><i class="fa fa-envelope"></i> Contact Us</a>
+        </div>
+      </nav>
+    </aside>
+    <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+    <nav class="navbar">
+      <div class="nav-left">
+        <button class="burger" onclick="toggleSidebar()"><i class="fa fa-bars"></i></button>
+        <a href="login.html" class="nav-login">Login</a>
+      </div>
+      <div class="nav-center">
+        <a href="index.html" style="text-decoration:none;"><span class="logo">HackTheShop</span></a>
+      </div>
+      <div class="nav-right">
+        <button class="nav-icon" onclick="toggleSearch()"><i class="fa fa-search"></i></button>
+        <button class="nav-icon" onclick="toggleWishlist()"><i class="fa fa-heart"></i></button>
+        <button class="nav-icon" onclick="toggleCart()">
+          <i class="fa fa-shopping-cart"></i>
+          <span class="cart-count" id="cartCount">0</span>
+        </button>
+      </div>
+    </nav>
+
+    <div class="search-dropdown" id="searchDropdown">
+      <input type="text" id="searchInput" placeholder="Search products...">
+      <button onclick="searchProducts()"><i class="fa fa-search"></i></button>
+    </div>
+
+    <!-- HERO -->
+    <div class="hero-banner">
+      <div>
+        <h2>🔐 Unlock Products Through Cybersecurity</h2>
+        <p>Browse a category → solve its security challenge → spin the wheel → win a random product!</p>
+      </div>
+      <a href="account.php" class="hero-banner-btn"><i class="fa fa-trophy"></i> My Progress</a>
+    </div>
+
+    <!-- CATEGORY CARDS -->
+    <section class="categories-section">
+      <div class="section-title">🗂️ Shop by Category</div>
+      <div class="section-sub">Each category is locked behind a cybersecurity challenge — click to unlock</div>
+      <div class="categories-cards">
+        <a class="cat-card" href="category.php?slug=pc">
+          <span class="cat-card-icon"><i class="fa fa-laptop"></i></span>
+          <div class="cat-card-name">PC &amp; Laptops</div>
+          <div class="cat-card-desc">Laptops, desktops, MacBooks and mini PCs</div>
+          <div class="cat-card-footer"><span class="cat-card-count">3 products</span><span class="cat-lock-badge locked">🔒 Locked</span></div>
+        </a>
+        <a class="cat-card" href="category.php?slug=phone">
+          <span class="cat-card-icon"><i class="fa fa-mobile"></i></span>
+          <div class="cat-card-name">Phones &amp; Tablets</div>
+          <div class="cat-card-desc">Smartphones, iPhones, Android &amp; tablets</div>
+          <div class="cat-card-footer"><span class="cat-card-count">3 products</span><span class="cat-lock-badge locked">🔒 Locked</span></div>
+        </a>
+        <a class="cat-card" href="category.php?slug=audio">
+          <span class="cat-card-icon"><i class="fa fa-headphones"></i></span>
+          <div class="cat-card-name">Audio</div>
+          <div class="cat-card-desc">Headphones, earbuds, speakers &amp; soundbars</div>
+          <div class="cat-card-footer"><span class="cat-card-count">3 products</span><span class="cat-lock-badge locked">🔒 Locked</span></div>
+        </a>
+        <a class="cat-card" href="category.php?slug=wearable">
+          <span class="cat-card-icon"><i class="fa fa-clock"></i></span>
+          <div class="cat-card-name">Wearables</div>
+          <div class="cat-card-desc">Smartwatches, fitness bands &amp; trackers</div>
+          <div class="cat-card-footer"><span class="cat-card-count">3 products</span><span class="cat-lock-badge locked">🔒 Locked</span></div>
+        </a>
+        <a class="cat-card" href="category.php?slug=camera">
+          <span class="cat-card-icon"><i class="fa fa-camera"></i></span>
+          <div class="cat-card-name">Cameras &amp; Drones</div>
+          <div class="cat-card-desc">DSLRs, action cams, instant cameras &amp; drones</div>
+          <div class="cat-card-footer"><span class="cat-card-count">3 products</span><span class="cat-lock-badge locked">🔒 Locked</span></div>
+        </a>
+        <a class="cat-card" href="category.php?slug=gaming">
+          <span class="cat-card-icon"><i class="fa fa-gamepad"></i></span>
+          <div class="cat-card-name">Gaming</div>
+          <div class="cat-card-desc">Consoles, controllers, keyboards &amp; mice</div>
+          <div class="cat-card-footer"><span class="cat-card-count">3 products</span><span class="cat-lock-badge locked">🔒 Locked</span></div>
+        </a>
+        <a class="cat-card" href="category.php?slug=accessory">
+          <span class="cat-card-icon"><i class="fa fa-plug"></i></span>
+          <div class="cat-card-name">Accessories</div>
+          <div class="cat-card-desc">Mice, hubs, keyboards, webcams &amp; power banks</div>
+          <div class="cat-card-footer"><span class="cat-card-count">3 products</span><span class="cat-lock-badge locked">🔒 Locked</span></div>
+        </a>
+        <a class="cat-card" href="category.php?slug=screen">
+          <span class="cat-card-icon"><i class="fa fa-tv"></i></span>
+          <div class="cat-card-name">Screens &amp; TVs</div>
+          <div class="cat-card-desc">Monitors, TVs, curved displays &amp; projectors</div>
+          <div class="cat-card-footer"><span class="cat-card-count">3 products</span><span class="cat-lock-badge locked">🔒 Locked</span></div>
+        </a>
+      </div>
+    </section>
+
+    <!-- FEATURED PRODUCTS PREVIEW -->
+    <section class="featured-section">
+      <div class="section-title">🔥 Featured Products</div>
+      <div class="section-sub">Unlock categories to add these to your cart</div>
+      <main class="products-grid">
+        <div class="product-card" onclick="window.location.href='category.php?slug=pc'">
+          <img class="product-img" src="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=400&q=80" alt="Laptop Pro X">
+          <div class="product-info">
+            <div class="product-name">Laptop Pro X</div>
+            <div class="product-price">$799</div>
+            <div class="product-actions">
+              <button class="btn-cart" onclick="event.stopPropagation();window.location.href='category.php?slug=pc'"><i class="fa fa-lock"></i> Unlock</button>
+              <button class="btn-wish" onclick="event.stopPropagation();toggleWish(this)"><i class="fa fa-heart"></i></button>
+            </div>
+          </div>
+        </div>
+        <div class="product-card" onclick="window.location.href='category.php?slug=phone'">
+          <img class="product-img" src="https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=400&q=80" alt="iPhone 15 Pro">
+          <div class="product-info">
+            <div class="product-name">iPhone 15 Pro</div>
+            <div class="product-price">$1099</div>
+            <div class="product-actions">
+              <button class="btn-cart" onclick="event.stopPropagation();window.location.href='category.php?slug=phone'"><i class="fa fa-lock"></i> Unlock</button>
+              <button class="btn-wish" onclick="event.stopPropagation();toggleWish(this)"><i class="fa fa-heart"></i></button>
+            </div>
+          </div>
+        </div>
+        <div class="product-card" onclick="window.location.href='category.php?slug=audio'">
+          <img class="product-img" src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&q=80" alt="Sony WH-1000XM5">
+          <div class="product-info">
+            <div class="product-name">Sony WH-1000XM5</div>
+            <div class="product-price">$349</div>
+            <div class="product-actions">
+              <button class="btn-cart" onclick="event.stopPropagation();window.location.href='category.php?slug=audio'"><i class="fa fa-lock"></i> Unlock</button>
+              <button class="btn-wish" onclick="event.stopPropagation();toggleWish(this)"><i class="fa fa-heart"></i></button>
+            </div>
+          </div>
+        </div>
+        <div class="product-card" onclick="window.location.href='category.php?slug=gaming'">
+          <img class="product-img" src="https://images.unsplash.com/photo-1593118247619-e2d6f056869e?w=400&q=80" alt="PlayStation 5">
+          <div class="product-info">
+            <div class="product-name">PlayStation 5</div>
+            <div class="product-price">$499</div>
+            <div class="product-actions">
+              <button class="btn-cart" onclick="event.stopPropagation();window.location.href='category.php?slug=gaming'"><i class="fa fa-lock"></i> Unlock</button>
+              <button class="btn-wish" onclick="event.stopPropagation();toggleWish(this)"><i class="fa fa-heart"></i></button>
+            </div>
+          </div>
+        </div>
+        <div class="product-card" onclick="window.location.href='category.php?slug=screen'">
+          <img class="product-img" src="https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=400&q=80" alt="Dell Monitor">
+          <div class="product-info">
+            <div class="product-name">Dell 27" 4K Monitor</div>
+            <div class="product-price">$599</div>
+            <div class="product-actions">
+              <button class="btn-cart" onclick="event.stopPropagation();window.location.href='category.php?slug=screen'"><i class="fa fa-lock"></i> Unlock</button>
+              <button class="btn-wish" onclick="event.stopPropagation();toggleWish(this)"><i class="fa fa-heart"></i></button>
+            </div>
+          </div>
+        </div>
+        <div class="product-card" onclick="window.location.href='category.php?slug=wearable'">
+          <img class="product-img" src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&q=80" alt="Apple Watch S9">
+          <div class="product-info">
+            <div class="product-name">Apple Watch S9</div>
+            <div class="product-price">$399</div>
+            <div class="product-actions">
+              <button class="btn-cart" onclick="event.stopPropagation();window.location.href='category.php?slug=wearable'"><i class="fa fa-lock"></i> Unlock</button>
+              <button class="btn-wish" onclick="event.stopPropagation();toggleWish(this)"><i class="fa fa-heart"></i></button>
+            </div>
+          </div>
+        </div>
+        <div class="product-card" onclick="window.location.href='category.php?slug=camera'">
+          <img class="product-img" src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=400&q=80" alt="Sony Alpha A7">
+          <div class="product-info">
+            <div class="product-name">Sony Alpha A7</div>
+            <div class="product-price">$2499</div>
+            <div class="product-actions">
+              <button class="btn-cart" onclick="event.stopPropagation();window.location.href='category.php?slug=camera'"><i class="fa fa-lock"></i> Unlock</button>
+              <button class="btn-wish" onclick="event.stopPropagation();toggleWish(this)"><i class="fa fa-heart"></i></button>
+            </div>
+          </div>
+        </div>
+        <div class="product-card" onclick="window.location.href='category.php?slug=accessory'">
+          <img class="product-img" src="https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=400&q=80" alt="Logitech MX Master">
+          <div class="product-info">
+            <div class="product-name">Logitech MX Master</div>
+            <div class="product-price">$99</div>
+            <div class="product-actions">
+              <button class="btn-cart" onclick="event.stopPropagation();window.location.href='category.php?slug=accessory'"><i class="fa fa-lock"></i> Unlock</button>
+              <button class="btn-wish" onclick="event.stopPropagation();toggleWish(this)"><i class="fa fa-heart"></i></button>
+            </div>
+          </div>
+        </div>
+      </main>
+    </section>
+
+    <div class="panel" id="cartPanel">
+      <div class="panel-header">🛒 Cart<button onclick="toggleCart()">✕</button></div>
+      <div class="panel-body" id="cartItems"><p class="empty-msg">Your cart is empty.</p></div>
+    </div>
+    <div class="panel" id="wishPanel">
+      <div class="panel-header">❤️ Wishlist<button onclick="toggleWishlist()">✕</button></div>
+      <div class="panel-body" id="wishItems"><p class="empty-msg">Your wishlist is empty.</p></div>
+    </div>
+
+    <div class="chatbot-bubble" onclick="toggleChatbot()">
+      <img src="images/echo.png" alt="Echo" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">
+    </div>
+    <div class="chatbot-frame" id="chatbotFrame">
+      <iframe src="chatbot.php" frameborder="0"></iframe>
+    </div>
+
+    <footer class="footer">© 2025 HackTheShop — Your one-stop shop for the latest tech & electronics</footer>
+  </div>
+
+  <script src="js/main.js"></script>
+  <script>
+    async function loadLiveStatus() {
+      try {
+        const res  = await fetch('php/reward.php?action=get_categories');
+        const cats = await res.json();
+        if (!Array.isArray(cats)) return;
+        cats.forEach(cat => {
+          const card  = document.querySelector(`.cat-card[href="category.php?slug=${cat.slug}"]`);
+          if (!card) return;
+          const badge = card.querySelector('.cat-lock-badge');
+          const count = card.querySelector('.cat-card-count');
+          if (badge) { badge.className = 'cat-lock-badge ' + (cat.unlocked ? 'unlocked' : 'locked'); badge.textContent = cat.unlocked ? '🔓 Unlocked' : '🔒 Locked'; }
+          if (count) count.textContent = cat.product_count + ' products';
+          if (cat.unlocked) card.classList.add('unlocked-cat');
+        });
+      } catch(e) {}
+    }
+    window.addEventListener('DOMContentLoaded', loadLiveStatus);
+  </script>
+</body>
+</html>
